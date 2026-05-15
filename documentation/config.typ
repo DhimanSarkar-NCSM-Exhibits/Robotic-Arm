@@ -79,7 +79,7 @@
 // FIGURE CAPTION STYLING FUNCTIONS
 // =============================================================================
 
-// --- STYLE 1: Amber Background with Red Text ---
+// 
 #let _style-figure-caption(caption-text) = {
   block(
     //width: 100%,
@@ -103,6 +103,7 @@
     inset: 16pt,
     radius: 8pt,
   )[
+    #set align(center)
     #set text(size: 16pt, weight: "bold")
     #text(fill: white)[Table of Contents]
   ]
@@ -165,37 +166,6 @@
     ]
   }
 
-  // OPTION B: BLUE STYLE (Uncomment to use)
-  // show figure.where(kind: image): it => {
-  //   block(width: 100%, below: 1em)[
-  //     #it.body
-  //     #_style-figure-caption-blue(it.caption)
-  //   ]
-  // }
-
-  // OPTION C: GREEN STYLE (Uncomment to use)
-  // show figure.where(kind: image): it => {
-  //   block(width: 100%, below: 1em)[
-  //     #it.body
-  //     #_style-figure-caption-green(it.caption)
-  //   ]
-  // }
-
-  // OPTION D: PURPLE STYLE (Uncomment to use)
-  // show figure.where(kind: image): it => {
-  //   block(width: 100%, below: 1em)[
-  //     #it.body
-  //     #_style-figure-caption-purple(it.caption)
-  //   ]
-  // }
-
-  // OPTION E: RED MINIMALIST STYLE (Uncomment to use)
-  // show figure.where(kind: image): it => {
-  //   block(width: 100%, below: 1em)[
-  //     #it.body
-  //     #_style-figure-caption-red-minimal(it.caption)
-  //   ]
-  // }
 
   // ---------------------------------------------------------------------------
   // SECTION 6: TABLE OF CONTENTS
