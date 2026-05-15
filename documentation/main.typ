@@ -4,10 +4,10 @@
 #show: setup-page
 
 
-= Introduction
+= Introduction to Robotics Workshop
 #include "intro.typ"
 
-= Robotics
+= Introduction to Robotics
 #include "robotics.typ"
 
 = Mechanical
@@ -15,3 +15,7 @@
 
 = Electrical
 #include "electrical.typ"
+
+
+
+#bibliography("references.bib")

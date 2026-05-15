@@ -10,12 +10,47 @@
 
 #set align(center)
 
+#place(
+  bottom + right,
+  dx: 100pt,
+  dy: 90pt,
+)[
+  #block(
+    width: 100%,
+    height: auto,
+  )[
+    #figure(
+      image("assets/cover-page-bg.jpg", width: 150%)
+    )
+  ]
+]
+
+#place(
+  horizon + center,
+  dx: 0pt,
+  dy: 0pt,
+)[
+  #block(
+    width: 100%,
+    height: auto,
+  )[
+    #rect(
+      width: 150%, 
+      height: 150%, 
+      fill: white.transparentize(30%)
+    )
+  ]
+]
+
+  
+
 #grid(
   columns: (auto, auto),
   image("assets/Ministry_of_Culture_India.svg", height: 20mm),
   image("assets/ncsm_logo.svg", height: 20mm),
   gutter: 1fr
 )
+
   
 #place(
   horizon + center,

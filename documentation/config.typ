@@ -38,7 +38,11 @@
 
 // --- Heading Level 1 ---
 #let _style-heading-1(it) = {
-  v(0.8em)
+  let heading-count = counter(heading).get().at(0)
+  if heading-count > 1 {
+    colbreak()
+  }
+  //v(0.8em)
   block(
     width: 100%,
     fill: color-light-bg,
@@ -56,7 +60,6 @@
 #let _style-heading-2(it) = {
   v(0.6em)
   box(
-    // stroke: (bottom: 2pt + color-accent),
     inset: (bottom: 4pt),
   )[
     #set text(size: 12pt, weight: "bold")
@@ -72,6 +75,25 @@
   text(fill: color-accent)[#it]
 }
 
+// =============================================================================
+// FIGURE CAPTION STYLING FUNCTIONS
+// =============================================================================
+
+// --- STYLE 1: Amber Background with Red Text ---
+#let _style-figure-caption(caption-text) = {
+  block(
+    //width: 100%,
+    //inset: 8pt,
+    //radius: 4pt,
+    //fill: color-highlight.lighten(85%),
+    //stroke: (left: 3pt + color-highlight),
+  )[
+    #set text(size: 9.5pt, weight: "semibold", style: "italic")
+    #text(fill: color-highlight)[#caption-text]
+  ]
+}
+
+
 // --- Table of Contents ---
 #let _build-toc() = {
   pagebreak()
@@ -82,7 +104,7 @@
     radius: 8pt,
   )[
     #set text(size: 16pt, weight: "bold")
-    #text(fill: white)[📚 Table of Contents]
+    #text(fill: white)[Table of Contents]
   ]
   v(1em)
   outline(
@@ -131,12 +153,57 @@
   show heading.where(level: 3): _style-heading-3
 
   // ---------------------------------------------------------------------------
-  // SECTION 5: TABLE OF CONTENTS
+  // SECTION 5: FIGURE CAPTION STYLING
+  // ---------------------------------------------------------------------------
+  set figure.caption(separator: [: ])
+
+  // OPTION A: AMBER STYLE (DEFAULT) ✓ ACTIVE
+  show figure.where(kind: image): it => {
+    block(width: 100%, below: 1em)[
+      #it.body
+      #_style-figure-caption(it.caption)
+    ]
+  }
+
+  // OPTION B: BLUE STYLE (Uncomment to use)
+  // show figure.where(kind: image): it => {
+  //   block(width: 100%, below: 1em)[
+  //     #it.body
+  //     #_style-figure-caption-blue(it.caption)
+  //   ]
+  // }
+
+  // OPTION C: GREEN STYLE (Uncomment to use)
+  // show figure.where(kind: image): it => {
+  //   block(width: 100%, below: 1em)[
+  //     #it.body
+  //     #_style-figure-caption-green(it.caption)
+  //   ]
+  // }
+
+  // OPTION D: PURPLE STYLE (Uncomment to use)
+  // show figure.where(kind: image): it => {
+  //   block(width: 100%, below: 1em)[
+  //     #it.body
+  //     #_style-figure-caption-purple(it.caption)
+  //   ]
+  // }
+
+  // OPTION E: RED MINIMALIST STYLE (Uncomment to use)
+  // show figure.where(kind: image): it => {
+  //   block(width: 100%, below: 1em)[
+  //     #it.body
+  //     #_style-figure-caption-red-minimal(it.caption)
+  //   ]
+  // }
+
+  // ---------------------------------------------------------------------------
+  // SECTION 6: TABLE OF CONTENTS
   // ---------------------------------------------------------------------------
   _build-toc()
 
   // ---------------------------------------------------------------------------
-  // SECTION 6: MAIN CONTENT
+  // SECTION 7: MAIN CONTENT
   // ---------------------------------------------------------------------------
   body
 }
