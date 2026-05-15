@@ -1,0 +1,48 @@
+// file: front-page.typ
+
+#import "config.typ": * 
+
+#set page(
+  paper: "a4",
+  margin: 1in,
+  columns: 1
+)
+
+#set align(center)
+
+#grid(
+  columns: (auto, auto),
+  image("assets/Ministry_of_Culture_India.svg", height: 20mm),
+  image("assets/ncsm_logo.svg", height: 20mm),
+  gutter: 1fr
+)
+  
+#place(
+  horizon + center,
+  [
+    #text([Summer Vacation Camp 2026], size: 15pt, weight: "regular") 
+    #block(spacing: 0.5em)
+
+    #text([Robotics Workshop], size: 25pt, weight: "bold") 
+    #block(spacing: 1em)
+    
+    //#text([#doc-author], size: 12pt, weight: "black")
+    //#block(spacing: 1em)
+    
+    //#text([#doc-date], size: 10pt, weight: "regular")
+  ]
+)
+
+
+
+#place(
+    bottom + center,
+    [
+        #block(spacing: 1em)
+        #text([National Science Centre, Delhi #linebreak()], size: 1.3em, weight: "bold") 
+        #text([(A unit of National Council of Science Museums) #linebreak()], size: 0.8em, weight: "bold")
+        #text([Ministry of Culture, Government of India #linebreak()], size: 0.93em, weight: "bold")
+        #text([Bhairon Road, New Delhi, Delhi, 110001 #linebreak()], size: 0.9em,)
+        #text([Website: #link("https://nscd.gov.in/")[https://nscd.gov.in/] Contact: +91 7428693710-17], size: 0.7em,)
+    ]
+)
