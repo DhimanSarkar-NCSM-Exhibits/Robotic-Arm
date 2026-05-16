@@ -1,7 +1,23 @@
 // file: electrical.typ
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Dhiman Sarkar, National Council of Science Museums (NCSM)
 
 
-Now that you understand the mechanical structure of a robotic arm, let’s explore the electrical system that brings it to life.
+
+
+
+
+#raw(
+  read("assets/arduino/robot_test_example1.ino"),
+  lang: "cpp",
+  block: true,
+)
+
+
+
+#pagebreak()
+
+Now that you understand the mechanical structure of a robotic arm, let's explore the electrical system that brings it to life.
 
 The electrical system is responsible for powering, controlling, and coordinating all movements of the robot.
 

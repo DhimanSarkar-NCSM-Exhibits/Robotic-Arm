@@ -1,4 +1,7 @@
 // file: config.typ
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Dhiman Sarkar, National Council of Science Museums (NCSM)
+
 
 // =============================================================================
 // DOCUMENT METADATA
@@ -165,7 +168,51 @@
       #_style-figure-caption(it.caption)
     ]
   }
+// ---------------------------------------------------------------------------
+  // SECTION 5B: RAW CODE BLOCK STYLING
+  // ---------------------------------------------------------------------------
 
+// Block code
+  show raw.where(block: true): it => {
+    block(
+      width: 100%,
+      fill: color-light-bg.darken(1%),
+      //stroke: 1pt + color-border,
+      radius: 5pt,
+      inset: 12pt,
+      below: 1em,
+    )[
+      #set text(font: "Consolas", size: 8pt)
+      #set par(justify: true, leading: 0.65em)
+      #let line-num-width = if it.lines.len() < 10 { 1.2em } else if it.lines.len() < 100 { 1.6em } else { 2em }
+      #stack(
+        dir: ttb,
+        spacing: 0.4em,
+        ..it.lines.enumerate().map(((i, line)) => {
+          grid(
+            columns: (line-num-width, 0.8em, auto),
+            rows: (auto,),
+            text(fill: color-text.lighten(30%), size: 9pt)[#(i + 1)],
+            [],
+            line.body,
+          )
+        })
+      )
+    ]
+  }
+
+  // Inline code
+  show raw.where(block: false): it => {
+    box(
+      fill: color-light-bg,
+      stroke: 0.5pt + color-border,
+      radius: 3pt,
+      inset: (x: 4pt, y: 2pt),
+    )[
+      #set text(font: "Consolas", size: 9.5pt)
+      #it
+    ]
+  }
 
   // ---------------------------------------------------------------------------
   // SECTION 6: TABLE OF CONTENTS
