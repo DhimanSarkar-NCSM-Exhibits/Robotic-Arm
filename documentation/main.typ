@@ -1,19 +1,21 @@
 // file: main.typ
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Dhiman Sarkar, National Council of Science Museums (NCSM)
 
 #import "config.typ": *
 #show: setup-page
 
 
-= Introduction to Robotics Workshop
+= Introduction
 #include "intro.typ"
 
-= Introduction to Robotics
+= Fundamentals of Robotics
 #include "robotics.typ"
 
-= Mechanical
+= Mechanical Aspects of Robotics
 #include "mechanical.typ"
 
-= Electrical
+= Electrical Aspects of Robotics
 #include "electrical.typ"
 
 

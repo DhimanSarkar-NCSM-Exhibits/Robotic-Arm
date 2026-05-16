@@ -1,4 +1,6 @@
 // file: front-page.typ
+// SPDX-License-Identifier: CC-BY-ND-4.0
+// SPDX-FileCopyrightText: 2026 Dhiman Sarkar, National Council of Science Museums (NCSM)
 
 #import "config.typ": * 
 
@@ -12,12 +14,12 @@
 
 #place(
   bottom + right,
-  dx: 100pt,
+  dx: 67pt,
   dy: 90pt,
 )[
   #block(
     width: 100%,
-    height: auto,
+    height: 160%,
   )[
     #figure(
       image("assets/cover-page-bg.jpg", width: 150%)
@@ -61,6 +63,9 @@
     #text([Robotics Workshop], size: 25pt, weight: "bold") 
     #block(spacing: 1em)
     
+    #text([Information Brochure], size: 12pt, weight: "thin") 
+    #block(spacing: 1em)
+
     //#text([#doc-author], size: 12pt, weight: "black")
     //#block(spacing: 1em)
     
