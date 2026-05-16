@@ -9,46 +9,16 @@ In robotics, mechanical design includes components such as links, joints, gears,
 
 In this section, we will explore the major mechanical elements used in robotic systems and understand how they work together to create controlled robotic motion.
 
-== Links
+== Robotic Arm Structure
 
-Links are the rigid structural members that form the body of a robotic arm. They connect different joints together and provide support for movement and load handling.
+A robotic arm is mainly built using structural components such as links, joints, and end effectors. These elements work together to provide movement, flexibility, and interaction with objects.
 
-The length and shape of links directly affect the robot’s reach, strength, and workspace.
-
-
-== Joints
-
-Joints connect two links and allow movement between them. They determine how the robot moves and how flexible the robotic system becomes.
-
-Most robotic arms use:
-- Revolute joints for rotational movement
-- Prismatic joints for linear movement
-
-Each movable joint contributes to the robot’s degrees of freedom.
+Links form the rigid body of the robot, joints provide movement between links, and the end effector performs the actual task such as gripping or handling objects.
 
 #figure(
   image("assets/19_link_joint_sch.jpg"),
-  caption: [Schematic diagram showing links and joints in a robotic arm.]
+  caption: [Schematic diagram showing links, joints, and end effector in a robotic arm.]
 )
-
-
-== End Effectors
-
-The end effector is the working tool attached at the end of a robotic arm. It directly interacts with objects and performs the required task.
-
-Different robots use different end effectors depending on the application.
-
-Common examples include:
-- Grippers
-- Vacuum suction tools
-- Welding tools
-- Surgical instruments
-
-// #figure(
-//   image("assets/end_effector_placeholder.jpg"),
-//   caption: [Examples of robotic end effectors.]
-// )
-
 
 
 == Gears
@@ -131,6 +101,9 @@ Different screw types are selected based on strength, appearance, available spac
 
 In this section, we will assemble the mechanical structure of the 3D-printed robotic arm step by step.
 
+Do not overtighten screws while assembling 3D-printed parts, as excessive force may damage the plastic components.
+
+
 === Step 1: Base Assembly
 
 *Required Components:*
@@ -144,7 +117,9 @@ Place the *Base Mount* on top of the *Base Cover Box* and align the screw holes 
 
 Secure the two parts together using four *M2#sym.times\10 screws*.
 
-Next, insert the *Servo Motor* into the motor slot with the shaft facing inward toward the holder. Route the motor wires through the designated wire channel to keep them organized.
+Next, insert the *Servo Motor* into the motor slot with the servo shaft facing inward toward the holder.
+
+Route the servo wires through the designated wire channel to keep them organized.
 
 Finally, fix the servo motor in place using one *M2#sym.times\6 screw*.
 
@@ -189,6 +164,13 @@ Please see @mech_assembly_2 for a visual reference of the first link assembly.
 - Servo Motor — 1 pc.
 - M2#sym.times\6 Screws — 3 pcs.
 
+Place the *Servo Arm Half* into the dedicated groove inside *Link 2*.
+
+Align *Link 2* with the shaft of the servo motor mounted on *Link 1*.
+
+Secure the link using one *M2#sym.times\6 screw*.
+
+Next, insert the third *Servo Motor* into the motor slot and fix it using two *M2#sym.times\6 screws*.
 
 Please see @mech_assembly_3 for a visual reference of the second link assembly.
 
@@ -205,8 +187,15 @@ Please see @mech_assembly_3 for a visual reference of the second link assembly.
 - Link 3 — 1 pc.
 - Servo Arm Half — 1 pc.
 - Servo Motor — 1 pc.
-- M2#sym.times\6 Screws — 3 pcs.  
+- M2#sym.times\6 Screws — 3 pcs.
 
+Place the *Servo Arm Half* into the groove provided in *Link 3*.
+
+Align *Link 3* with the shaft of the servo motor mounted on *Link 2*.
+
+Secure the link using one *M2#sym.times\6 screw*.
+
+Then mount the fourth *Servo Motor* into the motor slot and secure it using two *M2#sym.times\6 screws*.
 
 Please see @mech_assembly_4 for a visual reference of the third link assembly.
 
@@ -217,4 +206,41 @@ Please see @mech_assembly_4 for a visual reference of the third link assembly.
 
 
 
+=== Step 5: Mounting the End Effector
 
+*Required Components:*
+- Driver Gear — 1 pc.
+- Driven Gear — 1 pc.
+- Idler Compound Gear — 1 pc.
+- End Effector Claws — 2 pcs.
+- Servo Arm Half — 1 pc.
+- Servo Motor — 1 pc.
+- M2#sym.times\6 Screw — 1 pc.
+- M2#sym.times\10 Screws — 2 pcs.
+
+Assemble the gears and end effector claws as shown in the reference figure.
+
+Mount the *Servo Arm Half* onto the end effector mechanism and align it with the servo motor shaft.
+
+Secure the assembly using one *M2#sym.times\6 screw*.
+
+Finally, mount the servo motor and secure it using two *M2#sym.times\10 screws*.
+
+Please see @mech_assembly_5 for a visual reference of the end effector assembly.
+
+#figure(
+  image("assets/assembly/end_eftr_assembly.jpg"),
+  caption: [Mechanical Assembly of the End Effector.]
+) <mech_assembly_5>
+
+
+=== Final Mechanical Assembly
+
+After completing all assembly steps, the mechanical structure of the robotic arm is fully assembled and ready for electronic wiring and programming.
+
+A reference image of the complete mechanical assembly is shown in @mech_assembly_6.
+
+#figure(
+  image("assets/assembly/whole_assemblyl.jpg"),
+  caption: [Final Mechanical Assembly of the Robotic Arm.]
+) <mech_assembly_6>

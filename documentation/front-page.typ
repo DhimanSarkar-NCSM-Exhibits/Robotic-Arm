@@ -86,3 +86,12 @@
         #text([Website: #link("https://nscd.gov.in/")[https://nscd.gov.in/] Contact: +91 7428693710-17], size: 0.7em,)
     ]
 )
+
+
+#place(bottom + left, dx: -1in+5pt, dy: 1in-5pt,
+[
+  
+  #rotate(-90deg, reflow: true)[#datetime.today().display("[day] [month repr:long] [year]") | v#doc-version]
+  
+])
+
