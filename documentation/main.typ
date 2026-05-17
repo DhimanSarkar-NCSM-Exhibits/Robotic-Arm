@@ -5,8 +5,7 @@
 #import "config.typ": *
 #show: setup-page
 
-
-= Introduction
+= Welcome to the World of Robotics
 #include "intro.typ"
 
 = Fundamentals of Robotics
@@ -15,9 +14,12 @@
 = Mechanical Aspects of Robotics
 #include "mechanical.typ"
 
-= Electrical Aspects of Robotics
+= Electrical and Control Systems
 #include "electrical.typ"
 
-
-
 #bibliography("references.bib")
+
+#outline(
+  title: [List of Figures],
+  target: figure.where(kind: image),
+)
