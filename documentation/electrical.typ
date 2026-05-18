@@ -196,6 +196,64 @@ Arduino programs are written, compiled, and uploaded using the *Arduino IDE* (In
 
 An Arduino program is called a *sketch* and is saved with the `.ino` file extension.
 
+=== Serial Communication
+
+Once a program is running on the Arduino, you often need the microcontroller to *talk to the outside world* — sending data to a computer, receiving commands, or printing debug messages so you can see what is happening inside your code. The primary way Arduino does this is through *serial communication*.
+
+Serial communication is a method of transferring data where bits are sent *one after another* along a single wire — as opposed to parallel communication, where multiple bits travel simultaneously on multiple wires. Serial is simpler, requires fewer wires, and works reliably over longer distances, which is why it became the dominant method for connecting microcontrollers to computers and to each other.
+
+==== Types and Standards of Serial Communication
+
+Several distinct serial communication standards are used in electronics and robotics. They differ in how many wires they use, how many devices can be connected, and what speeds they support.
+
+*UART (Universal Asynchronous Receiver Transmitter)* is the most fundamental form of serial communication and the one Arduino uses to talk to your computer over USB. UART uses two signal wires — *Tx* (transmit) and *Rx* (receive) — plus a shared ground. It is called "asynchronous" because both sides agree on a speed in advance (the *baud rate*) rather than sharing a clock signal. The Arduino IDE's Serial Monitor and most serial terminal programs communicate over UART.
+
+*I2C (Inter-Integrated Circuit)* uses just two wires — *SDA* (data) and *SCL* (clock) — and allows a single controller to communicate with many devices on the same two-wire bus by addressing each one with a unique identifier. It is commonly used for sensors and driver modules such as the PCA9685. I2C is slower than SPI but requires fewer wires and supports many devices on one bus.
+
+*SPI (Serial Peripheral Interface)* uses four wires — *MOSI*, *MISO*, *SCK*, and *CS* — and is faster than I2C. It is used for high-speed devices such as SD card modules, display screens, and certain sensors. SPI is synchronous: a shared clock wire keeps both sides in step.
+
+*RS-232* is an older standard still found in industrial equipment, test instruments, and some legacy systems. It uses higher voltage levels (±12 V) than the 0–5 V TTL logic of microcontrollers, so a level-shifter chip is needed to connect an Arduino to an RS-232 device.
+
+*USB (Universal Serial Bus)*, while not a simple serial line in the traditional sense, is itself based on serial data transfer and is what physically connects your Arduino to your computer. On the Arduino Nano, a small USB-to-UART bridge chip (the CH340 or FT232) converts between the computer's USB connection and the ATmega328P's UART pins, so from the microcontroller's point of view it is simply sending and receiving UART data.
+
+==== Baud Rate
+
+The *baud rate* is the speed of a UART serial connection, expressed in *bits per second (bps)*. Both sides of a UART connection must be set to the same baud rate — if they differ, the received data will be garbled. Common baud rates you will encounter are:
+
+#figure(
+  table(
+    columns: (auto, 1fr),
+    align: (center, left),
+    table.header([*Baud Rate*], [*Typical Use*]),
+    [9600],   [Default for many beginner sketches and sensor modules.],
+    [19200],  [Moderate-speed sensor and module communication.],
+    [57600],  [Faster data logging and GPS modules.],
+    [115200], [High-speed Arduino communication; used in this robotic arm project.],
+    [250000], [Used by 3D printer firmware (Marlin) and high-throughput systems.],
+  ),
+  caption: [Common UART baud rates and their typical applications.]
+)
+
+Higher baud rates transfer data faster but are more sensitive to cable quality and electrical noise over long distances. For short USB connections between an Arduino and a computer, 115200 baud is reliable and fast enough for real-time control applications.
+
+==== Serial Port Names: Windows and Linux
+
+When you connect an Arduino to a computer, the operating system assigns it a *serial port name* — a software address you use to open a connection to the device.
+
+On *Windows*, serial ports are named *COM* followed by a number — for example `COM3`, `COM7`, or `COM11`. The Arduino IDE automatically detects available COM ports and lists them in the *Tools → Port* menu. You can also find the assigned port in the Windows Device Manager under "Ports (COM & LPT)".
+
+On *Linux* and *macOS*, serial devices appear as files inside the `/dev/` directory. Arduino boards typically appear as `/dev/ttyUSB0` or `/dev/ttyUSB1` (when using a CH340 USB-to-UART chip) or `/dev/ttyACM0` (when using an ATmega16U2 USB interface, as on the Arduino Uno). The Arduino IDE on Linux lists available ports in the same *Tools → Port* menu, reading directly from `/dev/`.
+
+In your Arduino code, you open the serial connection in `setup()` with a single line specifying the baud rate:
+
+```cpp
+void setup() {
+  Serial.begin(115200);
+}
+```
+
+From that point, you can send data to the computer with `Serial.print()` or `Serial.println()`, and check for incoming data with `Serial.available()` and `Serial.read()` or `Serial.readStringUntil()`. The Arduino IDE's *Serial Monitor* (the magnifying-glass icon in the top-right of the IDE) opens a terminal window connected to whichever COM or `/dev/` port is selected, letting you type commands to the Arduino and read its responses in real time.
+
 === The Structure of an Arduino Program
 
 Every Arduino sketch has the same two-part structure. The first part is the `setup()` function, which runs *once* when the microcontroller is powered on or reset. You use `setup()` to initialise hardware, configure pins, start communication interfaces, and do anything else that needs to happen once at the beginning. The second part is the `loop()` function, which runs *continuously and repeatedly* for as long as the board has power. Everything the robot does on an ongoing basis — reading sensors, updating motor positions, checking for incoming commands — goes inside `loop()`.
@@ -264,10 +322,10 @@ void setup() {
 }
 
 void loop() {
-  pwm.setPWM(0, 0, 150);   // Move to one position
+  pwm.setPWM(0, 0, 102);   // Move to one position
   delay(1000);
 
-  pwm.setPWM(0, 0, 350);   // Move to another position
+  pwm.setPWM(0, 0, 512);   // Move to another position
   delay(1000);
 }
 ```

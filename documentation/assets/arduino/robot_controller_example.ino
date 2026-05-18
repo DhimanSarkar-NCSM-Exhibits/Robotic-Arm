@@ -12,8 +12,8 @@
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
-int servoMin = 150;
-int servoMax = 600;
+int servoMin = 102;
+int servoMax = 512;
 
 void setup() {
 
