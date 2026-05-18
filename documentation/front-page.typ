@@ -83,7 +83,7 @@
         #text([(A unit of National Council of Science Museums) #linebreak()], size: 0.8em, weight: "bold")
         #text([Ministry of Culture, Government of India #linebreak()], size: 0.93em, weight: "bold")
         #text([Bhairon Road, New Delhi, Delhi, 110001 #linebreak()], size: 0.9em,)
-        #text([Website: #link("https://nscd.gov.in/")[https://nscd.gov.in/] Contact: +91 7428693710-17], size: 0.7em,)
+        #text([Website: #link("https://nscd.gov.in/")[https://nscd.gov.in/] Contact: +91 74286 93712], size: 0.7em,)
     ]
 )
 

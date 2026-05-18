@@ -1,96 +1,80 @@
 // file: intro.typ
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Dhiman Sarkar, National Council of Science Museums (NCSM)
 
+#import "config.typ": workshop-note
 
-Welcome! You are going to learn about an exciting field called Robotics.
+Have you ever watched a robotic arm sweep across a car factory floor — welding metal, lifting heavy parts, and painting surfaces with perfect consistency — never tiring, never losing focus? Have you seen footage of a robot arm on the International Space Station, delicately repositioning equipment in the silence of space? Or perhaps you have heard about surgical robots that help doctors make incisions so precise that patients recover in days instead of weeks?
 
-Robotics is a branch of science and engineering where we design and build machines that can perform tasks on their own or with very little human help. These machines are called robots. Robots can sense their surroundings, move in different ways, and interact with the world.
+These are not scenes from a science fiction film. They are real, and the science that makes them possible is called *Robotics*.
+
+Robotics is a captivating branch of science and engineering dedicated to designing and building machines that can perform tasks on their own — or with very little human guidance. These machines are called *robots*. What makes a robot remarkable is its ability to *sense* the world around it, *process* that information, and then *act* in a meaningful way. A robot is not just a mechanical gadget — it is an intelligent, integrated system.
 
 #figure(
   image("assets/01_robot_arm_semicon.jpg"),
   caption: [Robotic Arm used in Semiconductor Manufacturing Industry.]
 )
 
-In this learning module, you will explore a simple but very important example of a robot — a miniature robotic arm. It is built using basic engineering components such as 3D-printed parts, small servo motors, motor driver circuits, and a microcontroller like Arduino Nano.
-
-Even if these terms are new to you, they will become clear as you continue learning step by step.
-
-A deeper explanation of robotics concepts will be covered in a separate section later.
+Robots come in an astonishing variety of shapes and sizes. Some are as large as a room; others are smaller than your thumb. Some roll on wheels, some walk on legs, others fly through the air or swim underwater. But almost all of them share the same fundamental set of ideas at their core — ideas that you are about to explore and understand.
 
 
 == Why Robotics Matters
 
-Have you ever wondered how robots explore Mars, help doctors during surgery, or assist in rescue missions?
+Think about some of the most dangerous jobs in the world — cleaning sewers deep underground, fighting fires in collapsing buildings, handling radioactive materials in nuclear facilities, or disarming explosive devices. In every one of these situations, a human life is at risk. Now, imagine replacing the human with a robot. It does not feel pain. It does not get tired. It does not have a family waiting at home. It can go where humans cannot — and come back out with the job done.
 
-Robotics combines science, electronics, coding, and creativity to solve real-world problems. Today, robots are used in hospitals, factories, farms, space missions, and disaster response teams.
+This is one of the most compelling reasons why robotics matters: *it protects human lives*.
 
-Robotics also helps make dangerous jobs safer. Robots can assist in sewage cleaning, waste handling, fire rescue, and other risky tasks, helping protect human lives and improve working conditions.
+But the importance of robotics goes much further than safety. Robots help surgeons perform operations on parts of the body too delicate for the human hand. They help farmers harvest crops more efficiently, reducing food waste. They build cars, assemble electronics, and package products with a speed and accuracy no human workforce could match. In scientific research, robots handle chemicals and biological samples that would be hazardous to human researchers.
 
-In this workshop, you will learn how robots move, sense, and make decisions. More importantly, you will learn how to think like an inventor:
-- Solve problems logically
-- Build creative projects
-- Work with electronics and coding
-- Turn ideas into real machines
-
-Robotics is not just about technology — it is about creating solutions that can improve lives and shape the future.
-
+And now, with the rise of Artificial Intelligence, robots are becoming smarter — capable of learning, adapting, and making decisions in complex, unpredictable environments.
 
 #figure(
   image("assets/02_robot_future.jpg"),
   caption: [(Futuristic Image of) Students collaborating on robotics projects.]
 )
 
-== Why a Robotic Arm?
+Here is the truly exciting part: *you can be part of this*. Learning robotics means learning to think like an inventor — to look at a real problem in the world and ask, "How could I build something to solve this?" You will combine science, electronics, coding, and creativity. You will develop skills that stretch far beyond any single classroom subject. Robotics is not just a field of engineering — it is a way of thinking that can change the world.
 
-A robotic arm is one of the best ways to learn robotics because it combines almost every important concept in robotics into one system.
 
-Unlike some robots that are designed for only one specific task, a robotic arm is highly flexible. It can be programmed to pick objects, draw, sort items, assist in factories, perform surgeries, and much more.
+== The Robotic Arm: A Perfect Learning Machine
 
-While building and controlling a robotic arm, you learn:
-- Mechanical movement and joints
-- Motors and electronics
-- Sensors and control systems
-- Programming and automation
-- Precision and problem-solving
+There are many kinds of robots to explore, so why do we focus on the *robotic arm*?
 
-A robotic arm works similarly to a human hand, making it easier to understand movement and control step by step. That is why it is an excellent model for getting a complete introduction to robotics.
+Because a robotic arm is, quite simply, one of the most complete and educational systems in all of robotics. Unlike specialised robots built for just one narrow purpose, a robotic arm combines almost every fundamental concept of robotics into a single, elegant machine. Study a robotic arm deeply and you will understand robots broadly.
+
+A robotic arm also has the advantage of being deeply *familiar*. It works in a way that mirrors your own arm — rigid segments linked together at moving joints, with a tool at the end to interact with the world. This makes it easier to reason about: you already know intuitively how an arm should move, even before you learn the engineering behind it.
+
+While exploring a robotic arm, you will encounter and understand mechanical movement and joints, motors and electronics, sensors and control systems, programming and automation, and the thinking that goes into precision design.
 
 #figure(
   image("assets/03_robot_arm_ar4.webp"),
   caption: [An open-source DIY robotic arm. (#link("https://anninrobotics.com/")[AR4 by Articulated Robotics])]
 )
 
-== Applications of Robotic Arms
+#workshop-note[In this workshop, you will build, wire, and program a miniature four-joint robotic arm — a hands-on introduction to real robotic engineering using the same concepts found in industrial systems.]
 
-Robotic arms are widely used in different fields.
+
+== Where Robotic Arms Are Used
+
+Robotic arms have been transforming industries for decades, and their applications keep expanding into new and surprising territory.
 
 === Classical Applications
 
-For many years, robotic arms have been used in:
-- Automobile factories for welding, painting, and assembly  
-- Industrial production lines for handling heavy materials  
-- Packaging and sorting systems  
-- Space missions for handling tools safely in space  
+For many years, robotic arms were the unsung heroes of industrial manufacturing. In automobile factories, they weld metal chassis with sparks flying at inhuman speed, paint car bodies with flawless consistency, and assemble components along production lines that never stop. In warehouses, they sort and package thousands of items per hour. On space missions, robotic arms mounted on shuttles and space stations have been used to move satellites, repair equipment, and assist astronauts working in the vacuum of space.
 
 #figure(
   grid(
     columns: (1fr, 1fr),
     gutter: 10pt,
     image("assets/04_robot_painting.jpg", width: 100%),
-    image("assets/05_robot_packaging.jpg", width: 100%,),
+    image("assets/05_robot_packaging.jpg", width: 100%),
   ),
   caption: [Robotic automation in automobile painting and warehouse packaging.]
 )
 
-
 === Modern Applications
 
-Today, robotic arms are used in advanced technologies such as:
-- Medical surgeries requiring high precision  
-- Automated smart factories  
-- Semiconductor chip manufacturing  
-- Scientific research laboratories  
-- Space exploration and satellite servicing  
-
+Today, robotic arms are entering fields that would have seemed unimaginable just a generation ago. In hospitals, surgical robotic systems guide instruments through incisions smaller than a centimetre, giving surgeons a level of precision and control that reduces patient recovery time from weeks to days. In semiconductor factories, robotic arms assemble microchips so microscopic that a single human fingerprint would destroy them. In research laboratories, they handle dangerous materials and perform repetitive experimental procedures with tireless accuracy. And in ongoing space exploration programs, robotic arms on planetary rovers conduct geological experiments and collect samples millions of kilometres from any human operator.
 
 #figure(
   image("assets/06_robot_surgery.png", width: 100%),
@@ -98,25 +82,14 @@ Today, robotic arms are used in advanced technologies such as:
 )
 
 
-== What You Will Explore
+== What This Module Will Teach You
 
-In this workshop, you will build and study a robotic arm using real engineering components such as:
-- 3D-printed mechanical parts
-- Servo motors for movement
-- Motor driver and control circuits
-- Microcontrollers like Arduino Nano
-- Basic wiring and electronic connections
+This learning module takes you on a structured journey through the world of robotics. It is designed to build your understanding progressively — from the big picture down to the fine details.
 
-You will see how all these parts work together to create precise and controlled robotic movement.
+You will begin by exploring the *theory* that underpins every robotic system: how robots are structured mechanically, how electrical systems power and control their movements, and how programming transforms hardware into an intelligent machine. This theoretical foundation is important because it gives you the understanding to not just build things, but to truly know *why* they work — and how to fix them when they do not.
 
+Once the theory is solid, the module transitions into a complete, step-by-step *practical guide* where you will assemble the mechanical structure of a robotic arm, wire up its electronics, and write the programs that bring it to life.
 
-== Skills You Will Develop
+By the end, you will be able to look at a robotic system — whether in a factory, a hospital, or a space mission — and understand the engineering principles making it work. More importantly, you will have built one yourself.
 
-By the end of this workshop, you will be able to:
-- Understand how robotic systems are assembled
-- Learn basic electronics and circuit connections
-- Explore simple programming and automation
-- Understand movement, control, and mechanical design
-- Improve logical thinking and problem-solving skills
-
-Most importantly, you will gain hands-on experience in how real-world robots and intelligent machines are designed and built.
+Let us begin.

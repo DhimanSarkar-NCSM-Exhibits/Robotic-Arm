@@ -120,6 +120,17 @@
   pagebreak()
 }
 
+/// Small callout for brief workshop-specific references.
+#let workshop-note(body) = block(
+  fill: luma(236),
+  inset: (x: 1.2em, y: 0.9em),
+  radius: 4pt,
+  stroke: 0.6pt + luma(165),
+  width: 100%,
+)[#text(size: 10pt)[_*Workshop:*_ #body]]
+
+
+
 // =============================================================================
 // MAIN SETUP FUNCTION
 // =============================================================================

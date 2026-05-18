@@ -2,245 +2,111 @@
 // SPDX-License-Identifier: CC-BY-SA-4.0
 // SPDX-FileCopyrightText: 2026 Dhiman Sarkar, National Council of Science Museums (NCSM)
 
+#import "config.typ": workshop-note
 
-The mechanical structure forms the physical foundation of every robotic system. It determines how the robot moves, carries loads, maintains stability, and interacts with its environment.
+Every robot that interacts physically with the world needs a body — a mechanical structure that provides shape, support, and the ability to move. No matter how sophisticated the electronics or clever the programming, a robot cannot do useful work without a well-designed mechanical foundation.
 
-In robotics, mechanical design includes components such as links, joints, gears, end effectors, and fastening elements. Proper mechanical design is important for achieving strength, precision, flexibility, and smooth movement.
+In robotics, mechanical design covers everything from the overall structure of links and joints to the small screws that hold components in place. Getting this right matters enormously. A poorly designed mechanical system will flex, vibrate, or break under load — no amount of clever software can compensate for a structure that physically cannot do what is asked of it. Good mechanical design brings together strength, precision, lightness, and smooth motion — and balancing all four at once is what makes mechanical engineering both challenging and deeply satisfying.
 
-In this section, we will explore the major mechanical elements used in robotic systems and understand how they work together to create controlled robotic motion.
+In this chapter, you will explore the major mechanical elements found in robotic systems: how links and joints create movement, how gears transfer and transform forces, and how fasteners hold everything together reliably.
 
-== Robotic Arm Structure
 
-A robotic arm is mainly built using structural components such as links, joints, and end effectors. These elements work together to provide movement, flexibility, and interaction with objects.
+== Links: The Skeleton of a Robot
 
-Links form the rigid body of the robot, joints provide movement between links, and the end effector performs the actual task such as gripping or handling objects.
+A *link* is any rigid structural member in a robotic system — a solid part that does not flex or bend during normal operation. Links form the skeleton of the robot, providing the physical framework that all other components are mounted to and that gives the robot its shape.
+
+In a robotic arm, each solid segment between two adjacent joints is called a link. The base of the arm is sometimes considered a fixed link (it does not move), while all subsequent links rotate or translate relative to each other.
+
+The design of a link involves careful trade-offs. It must be strong enough to carry the loads placed on it — the weight of subsequent links, the end-effector, and any object being handled — without bending or breaking. At the same time, it should be as light as possible, because every gram of extra weight the arm must carry reduces its speed, increases the load on its motors, and demands more power from its electrical supply. Engineers select materials such as aluminium alloys, carbon fibre composites, or high-strength plastics depending on the application. In educational and hobbyist robotics, 3D-printed plastic links are extremely common because they are cheap, customisable, and strong enough for light-duty use.
+
+
+== Joints: Where Motion Happens
+
+If links are the bones, joints are where everything comes alive. A *joint* connects two links together and defines how they can move relative to each other.
+
+The two most fundamental types of joints in robotics are the *revolute joint* and the *prismatic joint*.
+
+A *Revolute Joint (R)* permits rotational motion: one link pivots around an axis fixed to the other link. This is the most common type of joint in robotic arms — it is mechanically simple, produces large angular displacements with relatively small actuator movement, and closely resembles the joints of the human arm. Your elbow is a good example: it rotates your forearm relative to your upper arm in a single arc of motion.
+
+A *Prismatic Joint (P)* permits linear sliding motion: one link slides along a fixed axis relative to the other. Rather than rotating, the joint extends or retracts, changing the distance between the two connected links. Linear actuators, telescoping segments, and sliding rails all implement prismatic motion. Prismatic joints appear frequently in gantry robots and CNC machines.
+
+#figure(
+  image("assets/13_RP_joints.jpg"),
+  caption: [Revolute (R) and Prismatic (P) joints. @Jazar2022]
+)
+
+In practice, almost every robotic arm you will encounter — from the simple educational kind to the massive industrial systems in car factories — is built almost entirely from revolute joints. Their simplicity, compactness, and versatility make them the default choice.
+
+
+== The Robotic Arm Structure
+
+A robotic arm brings links and joints together in a chain, starting from a fixed base and ending at the end-effector. Each link is connected to the next by a joint, and each joint allows a certain degree of motion. The combined result is a system that can position its tip in three-dimensional space across a wide range of positions and orientations.
+
+Understanding the structure of a robotic arm is easiest when you think of it as an engineering version of your own arm and hand. The first link from the base corresponds roughly to the upper arm; the second to the forearm; and then there may be additional links corresponding to the wrist and hand. Each joint between these links corresponds to a joint in your body.
 
 #figure(
   image("assets/19_link_joint_sch.jpg"),
-  caption: [Schematic diagram showing links, joints, and end effector in a robotic arm.]
+  caption: [Schematic diagram showing links, joints, and end-effector in a robotic arm.]
 )
 
+The end-effector — the tool at the tip of the arm — is the part that actually interacts with objects in the world. It is replaceable: swap out a gripper for a welding torch, or a welding torch for a surgical instrument, and you have a completely different robot in terms of capability, even though the underlying mechanical arm is unchanged. This modularity is one of the great engineering strengths of the robotic arm design.
 
-== Gears
 
-Gears are mechanical components used to transfer motion and torque between moving parts.
+== Gears: Multiplying Strength and Precision
 
-In robotics, gears are commonly used to:
-- Increase torque
-- Reduce motor speed
-- Improve movement precision
-- Transfer rotational motion efficiently
+One of the most elegant mechanical inventions ever made is the *gear* — and you will find them inside almost every actuator in a robotic arm.
 
-Servo motors often use internal gear systems to achieve accurate and controlled movement.
+A gear is a toothed wheel that meshes with another toothed wheel (or a toothed rack) to transfer rotational motion from one shaft to another. When two gears of different sizes are meshed together, something very useful happens: the smaller gear (the driver) turns faster but with less torque, while the larger gear (the driven) turns slower but with more torque. This relationship is called the *gear ratio*, and it is one of the most powerful tools mechanical engineers have.
+
+In robotics, gears serve several important purposes. They allow a small, high-speed electric motor to produce large amounts of torque by stepping down its speed through a gear train. They improve the precision of movement — because each motor rotation produces a much smaller rotation at the output, any small error in the motor position is correspondingly reduced. And they allow engineers to transmit motion around corners, between parallel shafts, or through tight mechanical arrangements that would be impossible to achieve otherwise.
 
 #figure(
   image("assets/20_gears.jpg"),
-  caption: [Variety of gears.]
+  caption: [A variety of gear types used in mechanical systems.]
 )
 
 #figure(
   image("assets/21_gears_working.jpg"),
-  caption: [Transfer of energy/motion through gears.]
+  caption: [Transfer of energy and motion through meshing gears.]
 )
 
+In servo motors — the actuators used in most educational and hobby robotic arms — a small electric motor spins at very high speed. Inside the servo housing, a compact gear train (often called a *gearbox* or *gear reduction*) reduces this speed dramatically while multiplying the torque. The result is an output shaft that moves slowly and precisely, with enough rotational force to move a robot joint against gravity and mechanical resistance. Without gears, the tiny motor inside a servo would spin uselessly fast without the strength to move anything.
 
 
-== Screw Specification
+== Fasteners: Holding It All Together
 
-Screws are used to securely assemble the mechanical components of the robotic arm.
+Every piece of a robot's mechanical structure must be attached to every other piece reliably. This is the job of *fasteners* — hardware components such as screws, bolts, and nuts that join parts together mechanically.
 
-Different screw sizes are selected depending on:
-- Component thickness
-- Required strength
-- Assembly location
+In robotics, the most commonly used fasteners are small *metric screws*, designated by the letter *M* followed by a number indicating the diameter in millimetres. The full specification of a metric screw is written in the format:
 
-In this workshop, small metric screws such as M2 and M3 screws are commonly used for mounting motors, links, and structural components.
+*M2#sym.times\10#sym.times\0.4*
 
-Screw specifications are usually written in a standard format such as:
+This means:
+- *M3* — the screw has a 3 mm shaft diameter
+- *12* — the screw is 12 mm long
+- *0.5* — the thread pitch (distance between adjacent threads) is 0.5 mm
 
-*M2#sym.times\3#sym.times\0.2*
-
-This represents:
-- *M2* → Screw diameter of 2 mm
-- *3* → Screw length of 3 mm
-- *0.2* → Thread pitch of 0.2 mm
-
-The thread pitch indicates the distance between two adjacent threads. In many robotics applications, the pitch value is often omitted because standard pitch screws are commonly used.
+In many practical situations, the pitch value is omitted because standard coarse-pitch screws are assumed.
 
 #figure(
   image("assets/24_metric_screws.jpg"),
-  caption: [Reading Specification for Metric Screws.]
+  caption: [Reading the specification of a metric screw.]
 )
 
+Screws also differ in the shape of their head — which determines what tool is used to drive them — and in how they sit in their hole. Common *drive types* include the *Phillips head* (the familiar cross-shaped recess), the *slotted head* (a single straight slot), the *hex socket* (a hexagonal recess driven by an Allen key, providing excellent grip and torque), and the *Torx head* (a six-pointed star shape, common in precision and high-torque applications).
 
-Screws also differ by head shape and drive type depending on the application:
-
-- *Phillips Head* → Common cross-shaped drive used in general assembly
-- *Slotted Head* → Single-slot screw used in simple applications
-- *Hex Socket* → Uses Allen keys and provides better grip and torque
-- *Torx Head* → Star-shaped drive used for high-torque and precision assembly
-
-Common mounting styles include:
-- *Countersunk Screws* → Sit flush with the surface
-- *Counterbore Screws* → Sit inside a recessed cylindrical hole
-- *Pan Head Screws* → Rounded top used for general mounting
-
-Different screw types are selected based on strength, appearance, available space, and ease of assembly.
+Mounting styles vary too. *Countersunk screws* are designed to sit flush with the surface of the material — the head tapers into a cone that fits into a matching recess, leaving a flat surface. *Counterbore screws* sit below the surface inside a cylindrical pocket, where a cap covers them. *Pan head screws* have a rounded, protruding head that sits on the surface, making them easy to install and remove.
 
 #figure(
   image("assets/22_screw_heads.jpg"),
-  caption: [Various types of screw heads and drive types.]
+  caption: [Various screw head shapes and drive types.]
 )
 
 #figure(
   image("assets/23_screw_types.jpg"),
-  caption: [Various types of screw for different applications.]
+  caption: [Various screw types for different mounting applications.]
 )
 
-== Mechanical Assembly
+Choosing the right fastener for each location in a robotic assembly requires thinking about the available space, the load the joint must carry, the material being fastened, and how often the joint may need to be disassembled for maintenance. In 3D-printed assemblies — which are common in educational robotics — fasteners must be chosen and installed with particular care, since plastic threads are softer and easier to strip than metal ones.
 
-In this section, we will assemble the mechanical structure of the 3D-printed robotic arm step by step.
-
-Do not overtighten screws while assembling 3D-printed parts, as excessive force may damage the plastic components.
-
-
-=== Step 1: Base Assembly
-
-*Required Components:*
-- Base Cover Box — 1 pc.
-- Base Mount — 1 pc.
-- Servo Motor — 1 pc.
-- M2#sym.times\10 Screws — 4 pcs.
-- M2#sym.times\6 Screw — 1 pc.
-
-Place the *Base Mount* on top of the *Base Cover Box* and align the screw holes properly.
-
-Secure the two parts together using four *M2#sym.times\10 screws*.
-
-Next, insert the *Servo Motor* into the motor slot with the servo shaft facing inward toward the holder.
-
-Route the servo wires through the designated wire channel to keep them organized.
-
-Finally, fix the servo motor in place using one *M2#sym.times\6 screw*.
-
-Please see @mech_assembly_1 for a visual reference of the base assembly.
-
-#figure(
-  image("assets/assembly/base1_assembly.jpg"),
-  caption: [Mechanical Assembly of the Base Structure.]
-) <mech_assembly_1>
-
-
-=== Step 2: Mounting the First Link
-
-*Required Components:*
-- Link 1 — 1 pc.
-- Servo Arm Full — 1 pc.
-- Servo Motor — 1 pc.
-- M2#sym.times\6 Screws — 3 pcs.
-
-Place the *Servo Arm Full* into the dedicated groove inside *Link 1*.
-
-Then position *Link 1* onto the base structure so that the servo arm aligns correctly with the shaft of the base servo motor.
-
-Secure *Link 1* to the servo shaft using one *M2#sym.times\6 screw*.
-
-Next, insert the second *Servo Motor* into the motor slot on *Link 1* and fix it in place using two *M2#sym.times\6 screws*.
-
-Please see @mech_assembly_2 for a visual reference of the first link assembly.
-
-#figure(
-  image("assets/assembly/mount1_assembly.jpg"),
-  caption: [Mechanical Assembly of the First Link.]
-) <mech_assembly_2>
-
-
-
-=== Step 3: Mounting the Second Link
-
-*Required Components:*
-- Link 2 — 1 pc.
-- Servo Arm Half — 1 pc.
-- Servo Motor — 1 pc.
-- M2#sym.times\6 Screws — 3 pcs.
-
-Place the *Servo Arm Half* into the dedicated groove inside *Link 2*.
-
-Align *Link 2* with the shaft of the servo motor mounted on *Link 1*.
-
-Secure the link using one *M2#sym.times\6 screw*.
-
-Next, insert the third *Servo Motor* into the motor slot and fix it using two *M2#sym.times\6 screws*.
-
-Please see @mech_assembly_3 for a visual reference of the second link assembly.
-
-#figure(
-  image("assets/assembly/link2_assembly.jpg"),
-  caption: [Mechanical Assembly of the Second Link.]
-) <mech_assembly_3>
-
-
-
-=== Step 4: Mounting the Third Link
-
-*Required Components:*
-- Link 3 — 1 pc.
-- Servo Arm Half — 1 pc.
-- Servo Motor — 1 pc.
-- M2#sym.times\6 Screws — 3 pcs.
-
-Place the *Servo Arm Half* into the groove provided in *Link 3*.
-
-Align *Link 3* with the shaft of the servo motor mounted on *Link 2*.
-
-Secure the link using one *M2#sym.times\6 screw*.
-
-Then mount the fourth *Servo Motor* into the motor slot and secure it using two *M2#sym.times\6 screws*.
-
-Please see @mech_assembly_4 for a visual reference of the third link assembly.
-
-#figure(
-  image("assets/assembly/link3_assembly.jpg"),
-  caption: [Mechanical Assembly of the Third Link.]
-) <mech_assembly_4>
-
-
-
-=== Step 5: Mounting the End Effector
-
-*Required Components:*
-- Driver Gear — 1 pc.
-- Driven Gear — 1 pc.
-- Idler Compound Gear — 1 pc.
-- End Effector Claws — 2 pcs.
-- Servo Arm Half — 1 pc.
-- Servo Motor — 1 pc.
-- M2#sym.times\6 Screw — 1 pc.
-- M2#sym.times\10 Screws — 2 pcs.
-
-Assemble the gears and end effector claws as shown in the reference figure.
-
-Mount the *Servo Arm Half* onto the end effector mechanism and align it with the servo motor shaft.
-
-Secure the assembly using one *M2#sym.times\6 screw*.
-
-Finally, mount the servo motor and secure it using two *M2#sym.times\10 screws*.
-
-Please see @mech_assembly_5 for a visual reference of the end effector assembly.
-
-#figure(
-  image("assets/assembly/end_eftr_assembly.jpg"),
-  caption: [Mechanical Assembly of the End Effector.]
-) <mech_assembly_5>
-
-
-=== Final Mechanical Assembly
-
-After completing all assembly steps, the mechanical structure of the robotic arm is fully assembled and ready for electronic wiring and programming.
-
-A reference image of the complete mechanical assembly is shown in @mech_assembly_6.
-
-#figure(
-  image("assets/assembly/whole_assemblyl.jpg"),
-  caption: [Final Mechanical Assembly of the Robotic Arm.]
-) <mech_assembly_6>
+#workshop-note[The robotic arm in this workshop uses M2 and M3 metric screws throughout its assembly. You will find specific screw sizes called out at each assembly step in the practical guide.]

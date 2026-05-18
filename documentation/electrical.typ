@@ -2,594 +2,283 @@
 // SPDX-License-Identifier: CC-BY-SA-4.0
 // SPDX-FileCopyrightText: 2026 Dhiman Sarkar, National Council of Science Museums (NCSM)
 
+#import "config.typ": workshop-note
+
+A robot with a perfect mechanical structure but no electronics would be nothing more than a very elaborate sculpture. It is the electrical and control systems that give a robot its ability to sense, decide, and act — to be truly alive as a machine.
+
+The electrical and control layer of a robot is responsible for three things: gathering information about the world through sensors, processing that information and making decisions through a controller, and carrying out those decisions through actuators. These three functions map directly onto the sense–process–act cycle you learned about in the previous chapter. In this chapter, you will explore each of those functions in depth — the hardware that implements them, how they work, and why they are designed the way they are.
 
 
-The electronic and control systems of a robot are responsible for sensing, processing information, and controlling movement. These systems allow the robot to interact with its environment and perform tasks accurately.
+== Sensors: The Robot's Senses
 
-In this section, we will explore the major electrical and programming components used in the robotic arm system.
+Your eyes let you see, your ears let you hear, your skin lets you feel temperature and pressure, and your inner ear gives you your sense of balance. A robot needs equivalent capabilities — a set of devices that let it perceive and measure its environment. These devices are called *sensors*.
 
+A sensor converts a physical quantity in the real world — distance, light intensity, temperature, force — into an electrical signal that the robot's controller can read and interpret. Without sensors, a robot is blind to the world around it. It can only follow pre-programmed instructions blindly, with no ability to respond to unexpected changes in its environment.
 
-== Robotic Actuators and Sensors
+#figure(
+  image("assets/10_robot_sensor.jpg"),
+  caption: [Various types of sensors used in robotics.]
+)
 
-Think about your own body for a moment.
+The range of sensors used in modern robotics is remarkable. *Distance sensors* (such as ultrasonic and infrared sensors) measure how far away an object is. *Camera systems* capture images or video that computer vision algorithms can analyse to identify objects, read text, or navigate environments. *Force and torque sensors* tell a robot how hard it is pushing or pulling. *Encoders* measure the precise rotational position and speed of a motor shaft. *Temperature sensors* monitor heat levels to prevent overheating. *Inertial measurement units (IMUs)* measure acceleration and angular velocity to track a robot's orientation and motion in space.
 
-Your eyes help you see, your ears help you hear, and your muscles help you move. Robots work in a very similar way.
-
-To interact with the world, every robot needs two important things:
-- A way to *sense* the environment
-- A way to *move* and perform actions
-
-This is where *sensors* and *actuators* come in.
-
-Sensors act like the robot’s senses. They help the robot collect information about the world around it.
-
-Different sensors can detect:
-- Distance and obstacles
-- Position and movement
-- Force and pressure
-- Light, sound, and temperature
-
-Actuators are the parts that create movement. They act like the robot’s muscles by converting electrical energy into motion.
-
-Common robotic actuators include:
-- Servo motors
-- DC motors
-- Stepper motors
-- Pneumatic and hydraulic systems
-
-Many beginner robotic systems use small servo motors because they can rotate to specific angles with good precision and easy control.
-
-In this workshop, the robotic arm uses only *mini servo motors* for movement and does not use external sensors for automatic feedback or correction.
-
-This means the robotic arm mainly works as an *open-loop robotic system*, where the robot follows predefined commands directly.
-
-More advanced robots use sensors to continuously monitor their movement and automatically correct errors. These are called *closed-loop systems*.
-
-Whether simple or advanced, almost every robot works using the same basic idea:
-*sense → process → act*
+The information from all these sensors flows back to the robot's controller, where it is combined with the programmed instructions to determine what action to take next. A robot that uses sensor feedback to continuously adjust its behaviour is far more capable and reliable than one that simply executes fixed commands.
 
 
+== Actuators: The Robot's Muscles
 
-== Servo Motors
+While sensors provide input, *actuators* provide output — they are the components that convert electrical energy into physical movement. Without actuators, a robot can sense and think all it likes, but it cannot do anything. Actuators are the muscles that make a robot act on the world.
 
-Servo motors are one of the most commonly used actuators in robotics. They are specially designed to provide *precise angular movement*, which makes them ideal for robotic arms, steering systems, walking robots, and automation projects.
+#figure(
+  image("assets/09_robot_actuators.jpg"),
+  caption: [Various types of actuators used in robotics.]
+)
 
-Unlike ordinary DC motors that spin continuously, a servo motor can rotate to a specific angle and hold its position accurately.
+The most common actuators in robotics are electric motors, which come in several important varieties. *DC motors* spin continuously when powered, and their speed and direction can be controlled electrically. They are widely used in wheeled robots and conveyor systems. *Stepper motors* divide a full rotation into a large number of precise equal steps, making them ideal for applications requiring accurate position control without a separate position sensor — they are common in 3D printers and CNC machines. *Servo motors* add a position sensor and a feedback control circuit to a DC motor, allowing them to rotate to and hold a precise angle — they are the actuator of choice for robotic arms.
 
-For example:
-- Move to 30°
-- Stop and hold position
-- Move to 90°
-- Return to 0°
+Beyond electric motors, *pneumatic actuators* use compressed air to drive linear pistons and are valued for their speed and force in industrial automation. *Hydraulic actuators* use pressurised fluid and can produce enormous forces, making them the actuator of choice in heavy industrial robots, construction equipment, and high-power applications.
 
-This precise positioning ability is what makes servo motors extremely useful in robotics.
-
-
-=== Internal Components of a Servo Motor
-
-A typical servo motor contains several mechanical and electronic parts packed inside a small enclosure.
-
-Main internal components include:
-- A small DC motor
-- Gear reduction system
-- Position sensor (usually a potentiometer)
-- Electronic control circuit
-- Output shaft
+For most educational and hobby robotic arm projects, servo motors are the go-to actuator because they combine precision, simplicity, and affordability in a compact package.
 
 
-The DC motor spins at high speed, but the internal gear system reduces the speed and increases the torque. This allows the servo to move with better strength and control.
+== Servo Motors: Precision in Every Degree
 
-The position sensor continuously measures the angle of the output shaft and sends feedback to the internal control circuit.
+Servo motors deserve a deeper look, because they are arguably the most important actuator in the world of educational and hobby robotics.
+
+What makes a servo motor special compared to an ordinary DC motor? A regular motor just spins — fast, continuously, and without any built-in sense of where it is. A servo motor, by contrast, can rotate to a *specific angle* and then hold that position with force, even if something tries to push it away. This precise, position-controlled behaviour is exactly what a robotic arm joint needs.
+
+Think about what you need a robotic arm to do: move joint 2 to exactly 90 degrees, hold it there while the end-effector grips an object, then move to 45 degrees. A DC motor alone cannot do this reliably. A servo motor can — it is engineered specifically for this kind of precise, commanded motion.
+
+=== Inside a Servo Motor
+
+Despite their small size, servo motors contain several cleverly integrated components working together.
+
+Inside the housing you will find a small DC motor — the actual source of rotational power. A *gear reduction train* (a compact system of interlocking gears) slows down the motor's high-speed rotation and multiplies its torque, producing an output shaft that turns slowly but with considerable strength. A *position sensor* (typically a small rotary potentiometer) continuously measures the current angle of the output shaft. And an *electronic control circuit* ties everything together, reading the position sensor and controlling the motor to achieve and maintain the commanded angle.
 
 #figure(
   image("assets/26_servo_initernal.jpg"),
-  caption: "Internal components of a typical servo motor",
+  caption: [Internal components of a typical servo motor.]
 )
-
 
 === How a Servo Motor Works
 
-A servo motor works using a small internal *closed-loop control system*.
+A servo motor operates using an internal *closed-loop control system*. When it receives a command to move to a certain angle, the internal control circuit compares the commanded angle with the current angle (as reported by the position sensor). If they differ, the circuit drives the motor in the direction that will reduce the error. As the output shaft approaches the target angle, the motor slows and eventually stops exactly where commanded. If an external force then tries to disturb the shaft from that angle, the servo immediately detects the error and applies corrective force to resist it — this is called *holding torque*.
 
-When a control signal tells the servo to move to a certain angle:
-- The control circuit compares the desired angle with the current position
-- The motor rotates in the required direction
-- The gears transfer the motion to the output shaft
-- The position sensor continuously checks the shaft angle
-- The motor stops automatically when the desired angle is reached
-
-This process happens very quickly and continuously inside the servo motor.
-
-Even if an external robotic system is open-loop, the servo motor itself internally uses feedback control for accurate positioning.
-
+This entire process happens extremely fast, creating the impression of instantaneous, locked positioning. Even when a robotic arm using servo motors is operating as an open-loop system at the top level (meaning the arm controller does not read feedback from external sensors), each individual servo motor is internally running its own closed-loop position control.
 
 === Rotational Limits
 
-Most standard hobby servo motors have limited rotation ranges, usually:
-- 0° to 180°
-- or about 90° in each direction
-
-This limited movement helps the servo maintain accurate positional control.
-
-Some special servos called *continuous rotation servos* can rotate endlessly like regular motors, but they sacrifice precise angle control.
-
+Standard hobby servo motors do not rotate freely through 360 degrees like a DC motor. They have a limited rotation range — typically *0° to 180°*, though some models offer a slightly narrower or wider range. This mechanical limit is intentional: it keeps the position sensor's readings unambiguous and allows the internal control circuit to know exactly where the shaft is at all times. Some special servos called *continuous rotation servos* sacrifice angle control to allow unlimited rotation, but these are not position-controlled and behave more like ordinary motors.
 
 === Analog and Digital Servo Motors
 
-Servo motors are generally divided into two main types.
+Servo motors come in two main electrical varieties. *Analog servo motors* use a simpler internal circuit that updates the motor control at a lower rate. They are less expensive and perfectly adequate for many applications. *Digital servo motors* use a faster, microprocessor-based internal controller that updates far more rapidly — delivering quicker response, better holding torque, and more precise positioning. Digital servos are preferred in demanding applications such as competitive robotics and advanced automation.
 
-*Analog Servo Motors*
-- Simpler and lower cost
-- Slower response
-- Lower holding accuracy
-- Common in beginner robotics projects
+=== Servo Motor Pin-Out
 
-*Digital Servo Motors*
-- Faster and more precise
-- Better holding torque
-- Improved response time
-- Used in advanced robotics and RC systems
+A standard servo motor connects through a 3-wire cable with a 3-pin connector. The brown or black wire is GND (Ground), the red wire is V+ (Power Supply, typically 4.8-6 V), and the orange, yellow, or white wire is the PWM signal line that controls the servo position.
 
-Digital servos use a faster internal control system, allowing them to react more quickly and maintain position more accurately.
+Always connect the wires correctly. Incorrect wiring or voltage can permanently damage the servo's internal control circuit. Although the colour convention is widely used, some manufacturers may use different wire colours, so checking the servo datasheet is recommended.
 
+#figure(
+  image("assets/30_sevo_pin.jpg"),
+  caption: [Servo motor connector description.]
+)
 
-=== PWM Control of Servo Motors
+=== Controlling a Servo with PWM
 
-Servo motors are commonly controlled using a signal called *PWM* (*Pulse Width Modulation*).
+Servo motors are controlled using an electrical signal technique called *Pulse Width Modulation*, or *PWM*.
 
-PWM is a technique where a digital signal rapidly switches between ON and OFF states. By changing the duration of the ON time, electronic systems can control power, speed, brightness, or position.
-
-A PWM signal is mainly described using:
-- *Frequency* → how many pulses are generated per second
-- *Pulse Width* → how long each pulse stays ON
-- *Duty Cycle* → percentage of ON time in one complete cycle
+PWM works by rapidly switching a digital signal between a HIGH (on) state and a LOW (off) state. Rather than varying the voltage level to communicate information, PWM varies the *width* — the duration — of each ON pulse. A microcontroller can generate this pattern easily and precisely, making PWM an ideal way to communicate a desired angle to a servo.
 
 #figure(
   image("assets/27_pwm_spec.jpg"),
-  caption: [Basic representation of a PWM signal.]
+  caption: [Basic representation of a PWM signal and its parameters.]
 )
 
-In servo motors, the *pulse width* determines the target angle of rotation.
+A PWM signal is characterised by its *frequency* (how many pulses occur per second), its *pulse width* (how long each pulse stays ON), and its *duty cycle* (the percentage of each period that the signal is ON).
 
-Most hobby servo motors use:
-- Frequency ≈ 50 Hz
-- One pulse every 20 ms
-
-Typical pulse widths are:
-- ~1 ms pulse → near 0°
-- ~1.5 ms pulse → near 90°
-- ~2 ms pulse → near 180°
-
-These pulses are continuously repeated so the servo can maintain its position accurately.
+For standard hobby servo motors, the control signal runs at approximately *50 Hz* — meaning one pulse arrives every 20 milliseconds. The position the servo moves to is determined by the width of that pulse: a pulse of approximately *1 millisecond* commands the servo to move to near 0°; a pulse of *1.5 milliseconds* moves it to roughly 90° (the centre); and a pulse of *2 milliseconds* moves it to near 180°. The servo reads each incoming pulse, calculates the commanded angle, and drives its internal motor accordingly.
 
 #figure(
   image("assets/25_servo_pwm.jpg"),
-  caption: [PWM signal controlling servo motor angle.]
+  caption: [PWM pulse width controlling servo motor angle.]
 )
 
-Microcontrollers such as Arduino generate PWM signals to control servo motors precisely.
+Microcontrollers such as Arduino can generate PWM signals on dedicated output pins, which is exactly how robotic arm controllers command their servo joints.
 
 
-=== Servo Motors in Robotics
+== Motor Drivers: Managing Power
 
-Servo motors are widely used because they are:
-- Compact
-- Easy to control
-- Affordable
-- Precise
-- Suitable for beginners
+Here is an important reality about microcontrollers: they are excellent at making decisions and generating control signals, but they are not designed to supply large amounts of electrical current. The output pins of a typical microcontroller can provide only a few milliamps — far too little to directly drive a motor, which may require hundreds of milliamps or more.
 
-In robotic arms, servo motors control the movement of different joints and help achieve smooth and controlled motion.
+This is where *motor drivers* come in. A motor driver sits between the microcontroller and the motor, acting as a powered intermediary. The microcontroller sends a small, low-power control signal to the driver; the driver uses that signal to switch a separate, high-current power supply to the motor in the right way. The microcontroller gives the instruction; the driver supplies the muscle.
 
-Because of their simplicity and precision, servo motors are one of the best starting points for learning robotics and automation.
-
-
-
-
-== Motor Drivers
-
-Imagine trying to lift a heavy object using only your fingers. It would be very difficult because your fingers alone cannot provide enough power.
-
-A similar problem happens in robotics.
-
-Microcontrollers such as Arduino are excellent at making decisions and sending signals, but they cannot directly provide enough electrical power to drive motors safely.
-
-This is why robots use *motor drivers*.
-
-A motor driver acts like a powerful helper between the controller and the motor:
-- The microcontroller gives instructions
-- The motor driver supplies the required power
-- The motor performs the movement
-
-Without a proper motor driver:
-- Motors may not move correctly
-- The controller may get damaged
-- Robot movement may become unstable
-
-
-=== Why Motor Drivers are Important
-
-Different motors require different amounts of:
-- Voltage
-- Current
-- Speed control
-- Direction control
-
-Motor drivers help robots manage all these requirements safely and efficiently.
-
-They also allow robots to:
-- Control motor speed
-- Change rotation direction
-- Drive multiple motors together
-- Protect sensitive electronics from high current
-
-You can think of a motor driver as the *power management system* of a robot.
-
+Without a proper motor driver, you risk destroying your microcontroller by overloading its output pins. Worse, motors connected directly to a microcontroller may draw so much current during startup or stall that they reset or damage the controller entirely. Motor drivers protect against all of this.
 
 === Types of Motor Drivers
 
-Different robots use different types of motor drivers depending on the motors being controlled.
+Different robots use different motor drivers depending on the type of motors being controlled. *DC motor drivers* (often based on an H-bridge circuit) allow a microcontroller to control the speed and direction of one or more DC motors. *Stepper motor drivers* generate the precise, timed sequences of pulses that stepper motors require. *Servo motor drivers* generate stable PWM signals for multiple servo motors simultaneously. *High-power motor controllers* handle the large currents needed in industrial robots, electric vehicles, and heavy machinery.
 
-Some common types are:
+=== Why Use a Dedicated Servo Driver?
 
-- *DC Motor Drivers*  
-  Used for controlling regular DC motors and their rotation direction.
+Servo motors contain their own internal control circuits, so you might wonder: does a robotic arm really need a separate servo driver module? Can the microcontroller not just generate PWM signals directly?
 
-- *Stepper Motor Drivers*  
-  Used for precise step-by-step movement.
+The answer is: it depends on how many servos you need. A microcontroller can directly generate PWM on a limited number of output pins — typically six to ten on a common Arduino board. For a simple one or two-servo project, direct control works fine. But a robotic arm with four, six, or more joints needs PWM on just as many channels. As the number of servos grows, the microcontroller starts to struggle: it runs out of PWM pins, the processing overhead of generating all those signals occupies valuable computation time, and the timing becomes less accurate because the controller is juggling too many tasks at once.
 
-- *Servo Motor Drivers*  
-  Used for controlling multiple servo motors using PWM signals.
+A dedicated servo driver module solves all of these problems at once. It takes over the task of generating PWM signals entirely, operating independently and freeing the microcontroller to focus on higher-level logic. The microcontroller simply tells the driver "set channel 3 to this angle" via a simple communication interface, and the driver takes care of the rest.
 
-- *High-Power Motor Controllers*  
-  Used in industrial robots, electric vehicles, and heavy machinery.
+=== The PCA9685 Servo Driver Module
 
-// #figure(
-//   image("assets/motor_driver_types.jpg"),
-//   caption: [Different types of motor drivers used in robotics.]
-// )
-
-
-=== Why Use a Separate Servo Driver?
-
-Servo motors already contain small internal control circuits. So you might wonder:
-
-*"Why do robots still need a separate servo driver?"*
-
-A microcontroller can directly control a few servos, but as more servos are added, several problems can appear:
-- Limited PWM pins
-- Increased processing load
-- Unstable timing signals
-- Power distribution problems
-
-A dedicated servo driver solves these issues by generating stable PWM signals independently.
-
-This allows:
-- Smoother movement
-- Better timing accuracy
-- Control of many servos at once
-- Reduced workload on the microcontroller
-
-This is especially useful in robotic arms where many joints need to move together smoothly.
-
-
-=== PCA9685 Servo Driver Module
-
-One of the most popular servo driver modules used in robotics is the *PCA9685 PWM Driver Module*.
-
-This module is specially designed for controlling multiple servo motors easily and efficiently.
+One of the most widely used and well-supported servo driver modules in robotics and electronics is the *PCA9685 PWM Driver Module*.
 
 #figure(
   image("assets/28_PCA9685.jpg"),
-  caption: [PCA9685 servo motor driver module.]
+  caption: [PCA9685 16-channel servo motor driver module.]
 )
 
-The PCA9685 can:
-- Control up to 16 servo motors
-- Generate stable PWM signals
-- Communicate using the I2C protocol
-- Reduce the processing load on the controller
+The PCA9685 is a dedicated PWM controller chip mounted on a convenient breakout board. It can independently generate PWM signals on up to *16 channels simultaneously*, each fully configurable in frequency and pulse width. It communicates with a microcontroller using *I2C* — a widely used two-wire serial communication protocol that requires only two signal wires (a clock line and a data line) regardless of how many modules are on the bus.
 
-Instead of generating PWM signals manually for every servo, the controller simply sends commands to the PCA9685, and the driver handles the signal generation automatically.
-
-This makes robotic systems more stable and easier to control.
-
-
-=== How the PCA9685 Works
-
-Inside the PCA9685 is a dedicated PWM controller chip.
-
-The microcontroller communicates with the module using I2C communication and sends:
-- Servo channel number
-- PWM timing information
-- Desired servo position
-
-The PCA9685 then independently generates accurate PWM signals for each servo motor.
-
-This allows many motors to operate smoothly at the same time.
-
-You can think of the PCA9685 as a *signal manager* that helps organize and control many motors together.
-
+Instead of generating 16 separate, carefully timed PWM signals itself, the microcontroller simply sends I2C messages to the PCA9685 specifying which channel to update and what PWM value to set. The PCA9685 handles the signal generation independently, producing stable and accurate pulses at all 16 outputs simultaneously. This dramatically reduces the processing burden on the microcontroller and ensures that all servo signals are generated with consistent, hardware-accurate timing.
 
 === PCA9685 Pin Description
 
-The PCA9685 module contains several important pins.
+The PCA9685 module exposes several groups of pins. The *power pins* include VCC (logic supply, typically 3.3V or 5V from the microcontroller), GND (ground), and V+ (a separate power rail for the servo motors, supplied by an external power source capable of delivering the current the motors require). The *I2C communication pins* are SDA (serial data) and SCL (serial clock), which connect directly to the corresponding I2C pins on the microcontroller. The *PWM output channels* (numbered 0 through 15) are 3-pin headers — ground, power, and signal — that connect directly to servo motor cables. Each header pin corresponds to the standard servo wire colour convention: *GND* connects to the *brown or black* wire, *V+* connects to the *red* wire, and the *PWM signal* pin connects to the *orange, yellow, or white* wire.
 
-*Power Pins*
-- *VCC* → Logic power supply (usually 3.3V or 5V)
-- *GND* → Ground connection
-- *V+* → External power supply for servo motors
-
-*I2C Communication Pins*
-- *SDA* → Serial Data line
-- *SCL* → Serial Clock line
-
-*PWM Output Pins*
-- Channels *0–15* → PWM outputs for servos or LEDs
-
-// #figure(
-//   image("assets/31_pca9685_pins.jpg"),
-//   caption: [Important pins of the PCA9685 module.]
-// )
+#workshop-note[The workshop robotic arm uses a PCA9685 to control four servo motors across channels 0 through 3. The wiring and programming of this module are covered in detail in the hands-on guide.]
 
 
-== Microcontrollers and Control Systems
+== Microcontrollers: The Brain of the Robot
 
-Think about how the human body works.
+Think about how your own body works. Your brain receives streams of information from your eyes, ears, and skin, processes it all in fractions of a second, decides what to do, and sends signals to your muscles to carry out those decisions. A robot needs something analogous — a central processing unit that can read sensor data, run the robot's program, make decisions, and send commands to actuators.
 
-Your brain receives information from your eyes, ears, and skin, processes that information, makes decisions, and then sends signals to your muscles to perform actions.
+This role is filled by the *microcontroller*.
 
-Robots work in a very similar way.
+A microcontroller is a small, self-contained programmable computer built for controlling hardware. Unlike a desktop computer, which is designed for general-purpose computing tasks, a microcontroller is optimised for direct interaction with electronic components: reading sensors, toggling outputs, generating timed signals, and communicating with other devices. Microcontrollers are everywhere — in your washing machine, your microwave oven, your car, your alarm clock, your TV remote control. They run the world quietly in the background, and in a robot, they run the show.
 
-Every robot needs a *control system* that can:
-- Receive information
-- Process instructions
-- Make decisions
-- Control movement
-
-This control system acts as the *brain* of the robot.
-
-
-=== What is a Microcontroller?
-
-A *microcontroller* is a small programmable computer designed to control electronic systems.
-
-Unlike a full desktop computer, a microcontroller is built specifically for controlling hardware such as:
-- Motors
-- Sensors
-- LEDs
-- Displays
-- Communication modules
-
-Microcontrollers are widely used in:
-- Robots
-- Smart appliances
-- Drones
-- Cars
-- Medical devices
-- Industrial automation systems
-
-Even simple everyday devices like washing machines and microwave ovens contain microcontrollers.
-
-
-=== What Does a Microcontroller Do in a Robot?
-
-In robotics, the microcontroller continuously manages the operation of the robot.
-
-It can:
-- Read sensor data
-- Control motors
-- Process programmed instructions
-- Communicate with other electronic modules
-- Coordinate different robotic movements
-
-A robot without a controller would simply be a collection of disconnected mechanical and electronic parts.
-
-
-=== Inputs, Processing, and Outputs
-
-Most robotic control systems follow a simple cycle:
-
-*sense → process → act*
-
-- Sensors collect information
-- The controller processes the data
-- Actuators perform movement or action
-
-For example:
-- A distance sensor detects an obstacle
-- The controller decides what to do
-- The motors change direction
-
-This continuous cycle allows robots to interact intelligently with the world.
-
-
-// #figure(
-//   image("assets/robot_control_flow.jpg"),
-//   caption: [Basic control flow in a robotic system.]
-// )
-
+In a robotic system, the microcontroller continuously manages all operations. It reads sensor data, evaluates the programmed logic to decide what action to take, and sends the appropriate commands to motor drivers, servo drivers, or other output devices. Without the controller, all the mechanical and electrical components of a robot are just an expensive pile of parts.
 
 === Popular Microcontrollers in Robotics
 
-Many different microcontrollers are used in robotics depending on the complexity of the system.
-
-Some popular examples include:
-- Arduino
-- ESP32
-- Raspberry Pi Pico
-- STM32
-- PIC Microcontrollers
-
-Some robots even use powerful embedded computers such as Raspberry Pi or NVIDIA Jetson for artificial intelligence and computer vision applications.
-
-
-=== Introduction to Arduino
-
-One of the most beginner-friendly and widely used robotics platforms is *Arduino*.
-
-Arduino became popular because it made electronics and programming much easier for students, hobbyists, and engineers.
-
-The Arduino platform provides:
-- Easy programming
-- Simple hardware connections
-- Large community support
-- Huge numbers of learning resources and libraries
-
-Because of its simplicity and flexibility, Arduino is commonly used in:
-- Robotics
-- Automation
-- Smart home systems
-- IoT projects
-- Educational electronics
-
+Many different microcontrollers are used in robotics, ranging from the very simple to the extremely powerful. *Arduino* boards (based on Atmel/Microchip AVR chips) are the most widely used in education and hobby robotics, valued for their simplicity and the enormous library of tutorials and community support around them. *ESP32* boards add built-in Wi-Fi and Bluetooth, making them popular for connected robots. *Raspberry Pi Pico* offers a capable microcontroller at very low cost. *STM32* chips are favoured in more advanced and performance-demanding applications. At the upper end, systems like the *Raspberry Pi* or *NVIDIA Jetson* are full embedded computers running Linux, used in robots that require computer vision or AI inference.
 
 === Arduino Nano
 
-In compact robotic systems, one very popular board is the *Arduino Nano*.
-
-The Arduino Nano is a small microcontroller development board based on the *ATmega328P microcontroller*.
+For compact robotic systems and educational projects, one of the most popular choices is the *Arduino Nano* — a small, breadboard-friendly microcontroller development board based on the *ATmega328P* microcontroller chip.
 
 #figure(
   image("assets/29_arduino_nano.jpg"),
-  caption: [Arduino Nano microcontroller board.]
+  caption: [Arduino Nano microcontroller development board.]
 )
 
-Despite its small size, the Arduino Nano can:
-- Read sensor inputs
-- Control motors
-- Communicate with driver modules
-- Generate PWM signals
-- Run robotic programs
+Despite its compact size (roughly 45 mm × 18 mm), the Arduino Nano packs in everything needed to control a multi-servo robotic system. It has 14 digital input/output pins (6 of which can generate PWM signals), 8 analogue input pins, hardware support for I2C, SPI, and UART serial communication, and runs its program at 16 MHz. It can be powered and programmed through a standard USB cable, and its pin headers plug directly into a standard breadboard — making it ideal for rapid prototyping and educational use.
 
-The Arduino Nano is especially useful for robotics because it is:
-- Small and lightweight
-- Easy to program
-- Breadboard friendly
-- Affordable
-- Power efficient
-
-
-=== Important Features of Arduino Nano
-
-Some important features of the Arduino Nano include:
-
+The key specifications of the Arduino Nano are:
 - *Microcontroller:* ATmega328P
-- *Operating Voltage:* 5V
+- *Operating Voltage:* 5 V
 - *Clock Speed:* 16 MHz
-- *Digital I/O Pins:* 14
-- *Analog Input Pins:* 8
-- *PWM Pins:* 6
-- *Communication Support:* UART, I2C, SPI
+- *Digital I/O Pins:* 14 (of which 6 support PWM)
+- *Analogue Input Pins:* 8
+- *Communication:* UART, I2C, SPI
 
-These features allow the Nano to control motors, communicate with sensors, and manage robotic systems effectively.
-
-
-=== Why Arduino is Great for Learning Robotics
-
-One of the best things about Arduino is that it allows you to quickly turn ideas into working projects.
-
-With just a few lines of code, you can:
-- Move motors
-- Blink LEDs
-- Read sensors
-- Build robots
-- Create automation systems
-
-Many students begin their robotics journey using Arduino because it provides a perfect balance between simplicity and real-world engineering concepts.
-
-In fact, many advanced robotics ideas start from the same basic principles you learn while working with small microcontrollers like Arduino.
+These features make the Nano well suited to reading sensors, communicating with driver modules via I2C, and generating the control signals needed to run a multi-joint robotic arm.
 
 
+== Writing Robot Programs
 
+A robot with functioning hardware but no program is useless — it simply sits there waiting for instructions that never come. Programming is the process of providing those instructions: telling the robot exactly what to do, when to do it, and how to respond to different situations.
 
+For Arduino-based systems, programs are written using the *Arduino Framework* — a beginner-friendly programming environment built on top of the C++ programming language. The Arduino Framework provides a simplified way to interact with hardware, wrapping complex low-level operations into easy-to-use functions. It also comes with a huge ecosystem of libraries — pre-written code packages that make it easy to control common devices such as servo drivers, displays, and sensors without having to understand every detail of how they work at the hardware level.
 
-== Arduino Framework and Programming
+=== The Arduino IDE
 
-A robot is not useful unless it knows *what to do*.
+Arduino programs are written, compiled, and uploaded using the *Arduino IDE* (Integrated Development Environment) — a free, cross-platform software application. The IDE provides a text editor for writing code, a compiler that translates your code into machine instructions the microcontroller can execute, and an uploader that sends the compiled program to the board via USB. It also includes a *Serial Monitor* — a small terminal window that lets you send text to and receive text from the running Arduino over USB, which is extremely useful for debugging and for building computer-controlled systems.
 
-That is where programming becomes important.
+An Arduino program is called a *sketch* and is saved with the `.ino` file extension.
 
-Programming gives instructions to the robot and tells it:
-- How to move
-- When to move
-- How fast to move
-- What actions to perform
+=== The Structure of an Arduino Program
 
-In robotics, these instructions are written as *programs* or *code*.
-
-For Arduino-based systems, we use the *Arduino Framework* to write and upload programs easily.
-
-
-=== What is the Arduino Framework?
-
-The Arduino Framework is a simple and beginner-friendly programming platform designed for electronics and robotics.
-
-It provides:
-- Easy programming functions
-- Built-in hardware control tools
-- Simple communication methods
-- Large collections of reusable libraries
-
-Instead of writing very complex low-level programs, Arduino allows you to quickly build real electronic and robotic systems using simple code.
-
-This is one of the main reasons why Arduino became extremely popular among:
-- Students
-- Makers
-- Hobbyists
-- Engineers
-- Robotics learners
-
-
-=== Arduino IDE
-
-Arduino programs are usually written using software called the *Arduino IDE* (*Integrated Development Environment*).
-
-The Arduino IDE is used to:
-- Write code
-- Check for errors
-- Compile programs
-- Upload code to the Arduino board
-- Monitor debugging messages
-
-// #figure(
-//   image("assets/arduino_ide.jpg"),
-//   caption: [Arduino IDE used for programming Arduino boards.]
-// )
-
-An Arduino program is called a *sketch* and is usually saved with the `.ino` file extension.
-
-
-=== Basic Structure of an Arduino Program
-
-Almost every Arduino program contains two important sections:
-
-- `setup()`  
-  Runs only once when the system starts.
-
-- `loop()`  
-  Runs continuously again and again.
-
-This structure makes Arduino programming simple and easy to understand.
+Every Arduino sketch has the same two-part structure. The first part is the `setup()` function, which runs *once* when the microcontroller is powered on or reset. You use `setup()` to initialise hardware, configure pins, start communication interfaces, and do anything else that needs to happen once at the beginning. The second part is the `loop()` function, which runs *continuously and repeatedly* for as long as the board has power. Everything the robot does on an ongoing basis — reading sensors, updating motor positions, checking for incoming commands — goes inside `loop()`.
 
 ```cpp
 void setup() {
-  // Runs once
+  // Runs once at startup
 }
 
 void loop() {
-  // Runs repeatedly
+  // Runs repeatedly, forever
 }
 ```
 
-You can think of:
-- `setup()` as the robot getting ready
-- `loop()` as the robot continuously doing its work
+You can think of `setup()` as the moment the robot wakes up and gets ready, and `loop()` as the robot's heartbeat — the continuous pulse of activity that keeps it running.
 
+=== Variables, Logic, and Decision Making
 
-=== Example: Blinking an LED
+Real robot programs need to store values and make decisions. *Variables* are named storage locations in memory that hold values — numbers, text, true/false states — that the program can read and modify.
 
-One of the first programs most students learn is blinking an LED.
+*Conditional statements* let the program branch and make decisions:
+
+```cpp
+int angle = 90;
+
+void setup() {
+}
+
+void loop() {
+  if (angle > 45) {
+    // Move one way
+  } else {
+    // Move another way
+  }
+}
+```
+
+This kind of logic is what allows a robot to respond differently to different situations — stopping when an obstacle is detected, adjusting its grip when a force sensor signals resistance, or selecting a different motion sequence based on a command received from a computer.
+
+=== External Libraries
+
+One of the most powerful features of the Arduino ecosystem is its library system. A *library* is a collection of pre-written code that provides a simple programming interface to a complex hardware device or algorithm. Instead of writing dozens of lines of low-level code to communicate with a servo driver chip, you simply include the relevant library and call its high-level functions.
+
+For the robotic arm system, two libraries are particularly important:
+
+```cpp
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
+```
+
+`Wire.h` is the standard Arduino library for I2C communication — it handles all the low-level detail of sending and receiving data over the two-wire I2C bus. `Adafruit_PWMServoDriver.h` provides a simple interface to the PCA9685 servo driver, allowing you to set any servo channel to any PWM value with a single function call.
+
+=== Example: Moving a Servo
+
+The following program initialises the PCA9685 servo driver and then repeatedly moves a servo on channel 0 between two positions:
+
+```cpp
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
+
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+
+void setup() {
+  pwm.begin();
+  pwm.setPWMFreq(50);
+}
+
+void loop() {
+  pwm.setPWM(0, 0, 150);   // Move to one position
+  delay(1000);
+
+  pwm.setPWM(0, 0, 350);   // Move to another position
+  delay(1000);
+}
+```
+
+`pwm.begin()` initialises the driver; `pwm.setPWMFreq(50)` sets the PWM frequency to 50 Hz (the standard for hobby servos); and `pwm.setPWM(channel, on_tick, off_tick)` sets the pulse timing on a given channel. The values 150 and 350 are raw PWM counts that correspond to specific pulse widths — and therefore to specific servo angles.
+
+This tiny program is a prototype of the full robotic arm controller. The same ideas — initialising the driver, setting frequencies, sending PWM values to specific channels — scale up directly to controlling a full four-joint arm.
+
+=== A Note on the LED Blink Example
+
+One of the very first programs most students write on an Arduino is a simple LED blink:
 
 ```cpp
 void setup() {
@@ -599,529 +288,11 @@ void setup() {
 void loop() {
   digitalWrite(13, HIGH);
   delay(1000);
-
   digitalWrite(13, LOW);
   delay(1000);
 }
 ```
 
-In this program:
-- `pinMode()` configures a pin as output
-- `digitalWrite()` turns the LED ON or OFF
-- `delay()` pauses the program for a certain amount of time
+This program might look almost trivially simple, but it demonstrates every core concept of Arduino programming: configuring a pin (`pinMode`), setting a digital output (`digitalWrite`), and timing with `delay`. The same building blocks appear in every more complex program you will ever write on an Arduino — they just get combined in more sophisticated ways.
 
-Even though this looks simple, the same idea is later used for controlling motors, sensors, and robotic systems.
-
-
-=== Variables and Decision Making
-
-Robots often need to make decisions.
-
-Programming allows robots to compare values and perform actions depending on conditions.
-
-```cpp
-int angle = 90;
-
-void setup() {
-}
-
-void loop() {
-
-  if(angle > 45) {
-    // Perform action
-  }
-
-}
-```
-
-Using variables and conditions allows robots to behave differently in different situations.
-
-
-=== External Libraries
-
-One of the most powerful features of Arduino is support for *external libraries*.
-
-Libraries are prewritten code packages that help control electronic devices easily.
-
-Libraries are commonly used for:
-- Servo motors
-- Displays
-- Sensors
-- Motor drivers
-- Communication modules
-
-Instead of writing everything from the beginning, you can simply include the required library.
-
-```cpp
-#include <Wire.h>
-#include <Adafruit_PWMServoDriver.h>
-```
-
-Here:
-- `Wire.h` is used for I2C communication
-- `Adafruit_PWMServoDriver.h` is used for controlling the PCA9685 servo driver module
-
-Libraries save time and make programming much easier.
-
-
-=== Example: Controlling a Servo Motor
-
-The following example initializes the PCA9685 servo driver and moves a servo motor between two positions.
-
-```cpp
-#include <Wire.h>
-#include <Adafruit_PWMServoDriver.h>
-
-Adafruit_PWMServoDriver pwm =
-Adafruit_PWMServoDriver();
-
-void setup() {
-
-  pwm.begin();
-
-  pwm.setPWMFreq(50);
-
-}
-
-void loop() {
-
-  pwm.setPWM(0, 0, 150);
-
-  delay(1000);
-
-  pwm.setPWM(0, 0, 350);
-
-  delay(1000);
-
-}
-```
-
-In this program:
-- The PCA9685 driver is initialized
-- PWM frequency is set to 50 Hz
-- Servo motor positions are changed using PWM values
-
-This is how programming creates real robotic movement.
-
-
-=== Uploading Programs to Arduino
-
-After writing the program:
-- The code is compiled
-- Errors are checked
-- The sketch is uploaded using a USB cable
-
-Once uploaded, the Arduino automatically starts running the program.
-
-
-=== Why Arduino Programming is Popular
-
-Arduino programming is widely used because it is:
-- Easy to learn
-- Beginner friendly
-- Fast for prototyping
-- Flexible and expandable
-- Supported by a huge global community
-
-With only a few lines of code, you can control:
-- LEDs
-- Motors
-- Sensors
-- Displays
-- Complete robotic systems
-
-Many advanced robotics and automation systems begin with the same basic programming ideas you are learning here.
-
-
-
-
-
-  
-
-
-== Circuit Design and Development
-
-Now that the mechanical structure is assembled, it is time to bring the robotic arm to life using electronics and programming.
-
-In this stage, we will connect:
-- Arduino Nano
-- PCA9685 servo driver
-- Servo motors
-- External power supply
-
-Together, these components form the complete control system of the robotic arm.
-
-
-=== Basic Control Architecture
-
-The robotic arm uses:
-- *Arduino Nano* as the main controller
-- *PCA9685* as the servo driver
-- *Mini servo motors* as actuators
-
-The Arduino sends control instructions to the PCA9685 driver using I2C communication. The PCA9685 then generates PWM signals to control the servo motors.
-
-The four servo motors are connected sequentially:
-- Base Joint → Channel 0
-- Link 1 Joint → Channel 1
-- Link 2 Joint → Channel 2
-- End Effector Joint → Channel 3
-
-This organized channel arrangement makes programming and debugging easier.
-
-
-// #figure(
-//   image("assets/robot_circuit_overview.jpg"),
-//   caption: [Basic control architecture of the robotic arm.]
-// )
-
-
-=== Connecting Servo Motors to PCA9685
-
-Each servo motor contains a 3-wire cable connected using a 3-pin header.
-
-Typical servo wire color coding is:
-
-- *Brown or Black* → Ground (GND)
-- *Red* → +5V Power
-- *Orange or Yellow* → PWM Signal
-
-The PCA9685 module also contains 3-pin output headers for every channel.
-
-Typical PCA9685 pin arrangement:
-- GND
-- V+
-- Signal
-
-While connecting the servos:
-- Match GND wire to GND
-- Match Power wire to V+
-- Match Signal wire to Signal pin
-
-Incorrect wiring may damage the servo motor or prevent proper operation.
-
-
-// #figure(
-//   image("assets/pca_servo_connection.jpg"),
-//   caption: [Servo motor connection to PCA9685 module.]
-// )
-
-
-=== Connecting PCA9685 to Arduino Nano
-
-The PCA9685 communicates with Arduino using the *I2C protocol*.
-
-The following connections are required:
-
-- *SDA* → Arduino A4
-- *SCL* → Arduino A5
-- *VCC* → Arduino 5V
-- *GND* → Arduino GND
-
-These wires handle communication and logic-level power between the two devices.
-
-
-// #figure(
-//   image("assets/pca_arduino_connection.jpg"),
-//   caption: [I2C connection between Arduino Nano and PCA9685.]
-// )
-
-
-=== External Power Supply
-
-Servo motors require significantly more current than the Arduino can safely provide.
-
-Therefore, the servo motors are powered using an external:
-- *5V*
-- *3A DC power supply*
-
-The power supply is connected to:
-- *V+* terminal of PCA9685
-- *GND* terminal of PCA9685
-
-Important:
-- Do *not* power multiple servos directly from the Arduino 5V pin
-- Always ensure correct polarity while connecting the supply
-
-
-=== Initial Power-Up Procedure
-
-During the initial setup:
-- Keep the external 5V supply switched *OFF*
-- Connect the Arduino Nano to the computer using a USB cable
-
-At this stage:
-- The Arduino receives power from the computer
-- The PCA9685 logic section also becomes active through Arduino VCC
-
-If the connections are correct:
-- The *red power LED* on the PCA9685 module should turn ON
-
-This confirms that:
-- Arduino is powered
-- PCA9685 logic circuit is working
-- I2C communication wiring is likely correct
-
-
-=== Uploading a Servo Test Program
-
-Before operating the complete robotic arm, it is important to test whether all servo motors are functioning properly.
-
-The following Arduino program moves all four servos between two positions.
-
-```cpp
-#include <Wire.h>
-#include <Adafruit_PWMServoDriver.h>
-
-Adafruit_PWMServoDriver pwm =
-Adafruit_PWMServoDriver();
-
-void setup() {
-
-  pwm.begin();
-
-  pwm.setPWMFreq(50);
-
-}
-
-// Arduino Nano I2C Pins:
-// A4 -> SDA
-// A5 -> SCL
-
-void loop() {
-
-  // setPWM(channel, start, end)
-
-  pwm.setPWM(0, 0, 150);
-  pwm.setPWM(1, 0, 150);
-  pwm.setPWM(2, 0, 150);
-  pwm.setPWM(3, 0, 150);
-
-  delay(1000);
-
-  pwm.setPWM(0, 0, 350);
-  pwm.setPWM(1, 0, 350);
-  pwm.setPWM(2, 0, 350);
-  pwm.setPWM(3, 0, 350);
-
-  delay(1000);
-
-}
-```
-
-
-=== Final Testing
-
-After uploading the program:
-- Turn ON the external 5V power supply
-- Observe the servo motors carefully
-
-If all connections are correct:
-- All four servo motors should move smoothly
-- The robotic arm joints should rotate between two positions
-
-If any servo does not move properly:
-- Immediately turn OFF the power
-- Recheck wiring connections
-- Verify servo orientation and channel assignment
-
-Once the test is successful, the robotic arm is ready for further programming and movement control experiments.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-== Programming Robot Controller
-
-Now that the robotic arm is mechanically assembled and electrically connected, the next step is to control it using software.
-
-In robotics, the controller program acts like the robot’s instruction manual. It tells the motors:
-- Which joint should move
-- How much it should move
-- When it should move
-
-In this robotic arm, the Arduino Nano reads commands from the computer and sends motion signals to the servo motors through the PCA9685 servo driver.
-
-
-=== Initial Servo Movement Test
-
-The first step in robot programming is always testing whether all motors are functioning correctly.
-
-A simple test program can:
-- Move each servo motor
-- Verify electrical connections
-- Check joint directions
-- Detect assembly problems early
-
-The following program moves all four servo motors between approximately 30#sym.degree and 60#sym.degree repeatedly.
-
-#raw(
-  read("assets/arduino/robot_test_example1.ino"),
-  lang: "cpp",
-  block: true,
-)
-
-When this program runs:
-- The Arduino sends PWM commands to PCA9685
-- PCA9685 generates servo control pulses
-- Servo motors rotate to the commanded positions
-
-This confirms that:
-- The Arduino is functioning
-- I2C communication is working
-- PCA9685 is generating PWM signals correctly
-- All servo motors are operational
-
-
-=== Understanding Robot Joint Control
-
-Each servo motor controls one robotic joint.
-
-The motors are connected as:
-
-- Channel 0 → Base Joint
-- Channel 1 → First Link
-- Channel 2 → Second Link
-- Channel 3 → End Effector
-
-Each PWM value corresponds to a certain servo angle.
-
-For example:
-- Smaller PWM value → smaller angle
-- Larger PWM value → larger angle
-
-Servo motors usually rotate within:
-- 0#sym.degree to 180#sym.degree
-
-However, practical movement limits are often smaller to avoid damaging the mechanical structure.
-
-
-=== From Fixed Motion to Real Robot Control
-
-The previous program performs only predefined movements.
-
-But real robots become much more powerful when they can receive commands dynamically from a computer.
-
-Instead of hardcoded motion:
-- The computer sends desired joint angles
-- Arduino receives the data
-- The robotic arm moves accordingly
-
-This allows:
-- Real-time control
-- Interactive robotics
-- GUI-based control systems
-- Wireless operation
-- Advanced automation
-
-
-=== Serial Communication
-
-The Arduino Nano communicates with the computer using *Serial Communication* through the USB cable.
-
-Serial communication transfers data as text.
-
-In this robotic arm system, the computer sends four joint angles using the following format:
-
-`ang1,ang2,ang3,ang4`
-
-Example:
-
-`45.0,90.0,120.0,60.0`
-
-Important rules:
-- Values must be separated only using commas
-- No spaces are allowed
-- All values are floating-point numbers
-
-Each value represents:
-- Joint 1 angle
-- Joint 2 angle
-- Joint 3 angle
-- Joint 4 angle
-
-
-=== Handling Invalid Data
-
-Robotic systems must always handle communication safely.
-
-If:
-- Incorrect data arrives
-- Missing values are received
-- Wrong formatting is detected
-
-The Arduino should:
-- Ignore the invalid command
-- Avoid unexpected robot movement
-- Send an error message back through Serial communication
-
-Example error response:
-
-`ERROR`
-
-This prevents accidental or dangerous robot motion caused by corrupted communication.
-
-
-=== Final Robot Controller Program
-
-The following Arduino program receives four joint angles from the computer through Serial communication and controls the robotic arm accordingly.
-
-Expected Serial format:
-
-`ang1,ang2,ang3,ang4`
-
-Example:
-
-`45.0,90.0,120.0,60.0`
-
-If invalid or incomplete data is received, the Arduino ignores the command and sends:
-
-`ERROR`
-
-The program then converts the received joint angles into PWM values and updates all four servo motors.
-
-#raw(
-  read("assets/arduino/robot_controller_example.ino"),
-  lang: "cpp",
-  block: true,
-)
-
-=== How the Program Works
-
-The program continuously waits for incoming Serial data from the computer.
-
-When a valid command arrives:
-- The four angle values are extracted
-- Each angle is converted into a PWM signal
-- PWM signals are sent to PCA9685
-- The robotic arm moves to the requested positions
-
-If incorrect data is received:
-- The command is ignored
-- An `ERROR` message is sent back
-
-This creates a safer and more reliable robot control system.
-
-
-=== Communication Summary
-
-- Communication Type → Serial over USB
-- Baud Rate → `115200`
-- Servo Driver → PCA9685
-- Control Method → Open-loop servo position control
-
-This same control architecture is commonly used in:
-- Desktop robotic arms
-- CNC systems
-- Educational robots
-- Automation systems
-- Research robotics platforms
+#workshop-note[The robotic arm in this workshop is controlled by an Arduino Nano communicating with a PCA9685 over I2C. You will write and upload programs in the Arduino IDE during the hands-on session.]

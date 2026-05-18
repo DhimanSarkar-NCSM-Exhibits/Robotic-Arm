@@ -1,337 +1,201 @@
 // file: robotics.typ
+// SPDX-License-Identifier: CC-BY-SA-4.0
+// SPDX-FileCopyrightText: 2026 Dhiman Sarkar, National Council of Science Museums (NCSM)
 
-A robotic system is created by combining mechanical structures, electronic circuits, sensors, actuators, and programmable control systems into a single integrated machine.
+#import "config.typ": workshop-note
 
-In simple terms:
-- The mechanical structure provides movement and support
-- Sensors collect information from the environment
-- Actuators such as motors create motion
-- Electronic circuits distribute power and signals
-- A controller or microcontroller processes instructions and coordinates all operations
+A robot is far more than a mechanical toy or a remote-controlled gadget. A true robotic system is a carefully engineered combination of mechanical structures, electronic circuits, sensors, actuators, and programmable intelligence — all working together as one integrated machine.
 
-Together, these components allow a robot to sense, process, decide, and act.
+Modern robotics draws from an impressive range of disciplines: mechanical engineering gives robots their physical form and movement; electronics and electrical systems provide power and signals; computer programming supplies instructions and logic; control systems ensure accurate, stable behaviour; and increasingly, artificial intelligence allows robots to learn and adapt to their environment.
 
-Modern robotics combines concepts from:
-- Mechanical Engineering
-- Electronics and Electrical Systems
-- Computer Programming
-- Control Systems and Automation
-- Artificial Intelligence and Embedded Systems
-
-Depending on their design, robots can perform tasks autonomously or under human supervision. Industrial robotic arms, mobile robots, drones, medical robots, and space robots are all built using these same fundamental principles.
+Depending on their design, robots can operate fully autonomously — making every decision on their own — or under human supervision, with a person guiding their actions from a distance. Industrial robotic arms, autonomous vehicles, surgical robots, planetary rovers, and underwater drones are all built using the same fundamental principles you are about to learn.
 
 
-== 1.1 Historical Development @Jazar2022
+== How a Robot Thinks and Acts
 
-The idea of robots and automated machines has existed for a long time, but modern robotics began developing during the 20th century.
+Before diving into components and classifications, let us answer the most important question first: *how does a robot actually work?*
 
-Around 1938, one of the first position-controlling machines was created for spray painting. Later, during World War II, engineers developed *teleoperators* — machines that allowed people to safely handle radioactive and hazardous materials from a distance.
+Every robotic system, no matter how simple or complex, follows a single fundamental cycle. It senses the world around it, processes that information to make a decision, and then acts on that decision through physical movement or output. This three-step loop — *sense, process, act* — is the heartbeat of every robot ever built.
 
-Another important technology was *Computer Numerical Control (CNC)*, which improved the precision of industrial machines and manufacturing.
-
-By combining these ideas, engineers began creating programmable mechanical systems that eventually became modern robots.
-
-In 1954, George Devol designed one of the first programmable robots. Later, in the early 1960s, Joseph Engelberger helped commercialize industrial robots called *Unimates* through his company *Unimation*. Because of his contributions, Engelberger is often called the “Father of Robotics.”
-
-Industrial robotic arms became increasingly popular after 1960, especially in automobile factories where robots could perform repetitive tasks with high speed and precision. During the 1980s, the robotics industry grew rapidly due to major investments in industrial automation.
-
-Today, robotics continues to evolve with artificial intelligence, advanced sensors, and automation systems, making robots smarter and more capable than ever before.
-
-
-== Functional Architecture of a Robot
-
-Every robotic system can be understood using three main functional parts:
-
-- *Input (Sensors)* → helps the robot detect and understand its environment  
-- *Processing Unit* → processes information and makes decisions  
-- *Output (Actuators)* → performs movement or physical actions  
-
-A robot continuously follows this cycle:
-*sense → process → act*
+Think of it like this: imagine you are riding a bicycle and you notice a pothole in the road ahead. Your eyes (sensors) detect the hazard. Your brain (processing unit) decides to steer around it. Your arms and legs (actuators) carry out that decision. A robot does exactly the same thing, just with cameras and distance sensors instead of eyes, a microcontroller instead of a brain, and motors instead of muscles.
 
 #figure(
   image("assets/07_robot_flow.jpg"),
   caption: [Functional flow of a robotic system.]
 )
 
-For example:
-- A camera or distance sensor acts as an input device
-- A microcontroller such as Arduino acts as the processing unit
-- Motors or servos act as output devices that create movement
+A camera or distance sensor feeds information into the system. A microcontroller such as Arduino receives that information, runs through its programmed instructions, and decides what to do. Then motors or servo motors carry out the physical response. This cycle happens continuously — often hundreds of times per second — allowing a robot to respond to a changing environment in real time.
 
-All modern robots — from industrial robotic arms to autonomous vehicles — are built using this same basic architecture.
+All modern robots, from industrial robotic arms to self-driving cars, are built around this same fundamental architecture.
 
 
+== The Building Blocks of a Robot @Jazar2022
 
-== Components of a Robot @Jazar2022
-
-A robot is made by combining mechanical, electronic, and control systems into a single working machine. Although robots can have different shapes and purposes, most robotic systems are built using a common set of components.
+Now that you understand how a robot works conceptually, let us look at the individual components that make it happen. Think of a robot as a miniature version of the human body — each mechanical and electronic part has an analogue in your own anatomy.
 
 === Links
 
-The rigid structural parts of a robot are called *links*. These form the body of the robot and provide support and movement structure.
+The rigid structural parts of a robot are called *links*. These form the skeleton of the robot, providing the physical framework that everything else is attached to and moves around.
 
-In a robotic arm, each segment between two joints is considered a link. Links are usually designed to be strong, lightweight, and capable of handling mechanical forces during movement.
-
+In a robotic arm, each solid segment between two joints is a link. Links must be strong enough to handle mechanical forces during movement, but also as lightweight as possible — a heavier arm requires more powerful motors, which in turn require more power and more robust electronics. Engineers carefully balance strength and weight in every link they design.
 
 === Joints
 
-*Joints* connect two links together and allow relative movement between them.
+If links are the bones, then *joints* are where the action happens. A joint is the connection between two links that allows them to move relative to each other.
 
-The two most common types of joints are:
-- *Revolute Joint (R)* → allows rotational motion like a hinge
-- *Prismatic Joint (P)* → allows linear sliding motion
+There are two fundamental types of joints in robotics. A *Revolute Joint (R)* allows rotational motion — one link pivots around the other, like the hinge of a door or the rotation of your elbow. A *Prismatic Joint (P)* allows linear sliding motion — one link slides along the other in a straight line, like the piston in an engine.
 
-Joints determine how a robot moves and how many directions of movement it can achieve.
-
-#figure( 
-  image("assets/08_robot_component.jpg"),
-  caption: [Components of a robotic system.]
-)<08_robot_component>
-
+The combination and arrangement of revolute and prismatic joints determines the entire movement repertoire of a robot. Most robotic arms use revolute joints almost exclusively, since rotational motion is highly versatile and closely mimics the movement of a human arm.
 
 === Manipulator
 
-The main mechanical structure of a robot consisting of links and joints is called the *manipulator*.
-
-In robotic arms, the manipulator is responsible for positioning and moving the robot’s working end to different locations. Most industrial robotic arms are manipulators designed for precise and controlled motion.
-
+The complete mechanical structure formed by links and joints together is called the *manipulator*. In robotic arms, the manipulator is the long, jointed structure that positions the working end of the arm in space. Industrial robotic arms are essentially very sophisticated manipulators, engineered to position their endpoints with extraordinary precision and repeatability.
 
 === Wrist
 
-The *wrist* is the section near the end of the robotic arm that provides flexible orientation and fine adjustment.
-
-It helps the robot rotate or tilt the end-effector to perform tasks from different angles, similar to the wrist movement of a human hand.
-
+Near the end of the manipulator, just before the working tool, is the *wrist*. The wrist provides fine control over orientation — allowing the robot to tilt, rotate, or angle its end tool to approach objects from different directions. This is especially important in tasks like surgery, welding, or assembly, where the approach angle matters as much as the position.
 
 === End-Effector
 
-The *end-effector* is the tool attached at the end of the robot.
+The *end-effector* is the tool attached at the very tip of the robotic arm. It is the part that directly interacts with the world and performs the actual work. Just as a human hand can hold a pen, grip a ball, or press a button, a robotic end-effector is designed and swapped out depending on the task at hand. Grippers pick up objects; welding torches join metal; vacuum suction tools lift flat surfaces; surgical instruments perform precise medical procedures.
 
-It is the part that directly interacts with objects and performs the actual work. Different robots use different end-effectors depending on the application.
+#figure(
+  image("assets/08_robot_component.jpg"),
+  caption: [Components of a robotic arm with labeled parts.]
+) <08_robot_component>
 
-Examples include:
-- Grippers for picking objects
-- Welding tools
-- Surgical instruments
-- Vacuum suction tools
-
-See @08_robot_component for an example of a robotic arm with its components labeled.
-
+See @08_robot_component for a labeled view of a typical robotic arm with its components identified.
 
 === Actuators
 
-*Actuators* are the components that create movement in a robot. They act like the muscles of the robotic system.
+*Actuators* are the muscles of the robot — the components that convert electrical energy into mechanical movement. Without actuators, a robot would be nothing but a rigid sculpture.
 
-Common actuators include:
-- Servo motors
-- DC motors
-- Pneumatic cylinders
-- Hydraulic systems
+Common actuators used in robotics include servo motors (which rotate to precise angles), DC motors (which spin continuously and are often used in wheeled robots), stepper motors (which move in precise incremental steps), pneumatic cylinders (which use compressed air to push or pull), and hydraulic systems (which use pressurised fluid to produce very large forces).
 
-Actuators provide the force required to move links and joints.
-
-#figure( 
+#figure(
   image("assets/09_robot_actuators.jpg"),
   caption: [Various types of actuators used in robotics.]
 )
 
 === Sensors
 
-*Sensors* allow the robot to collect information about itself and its surroundings.
+If actuators are the muscles, then *sensors* are the senses. Sensors allow the robot to gather information about both its own state and the world around it.
 
-Sensors help robots measure:
-- Position
-- Distance
-- Speed
-- Force
-- Temperature
-- Light and sound
+Sensors can measure an enormous range of physical quantities: position and orientation, distance to obstacles, speed and acceleration, applied force and pressure, temperature, light intensity, sound, and much more. All of this information flows back to the controller, where it is used to make decisions and adjust the robot's behaviour.
 
-The information collected by sensors is sent to the control system for decision making.
-
-#figure( 
+#figure(
   image("assets/10_robot_sensor.jpg"),
   caption: [Various types of sensors used in robotics.]
 )
 
-
 === Controller
 
-The *controller* acts as the brain of the robot.
+Finally, the *controller* is the brain of the robot. It receives data from sensors, runs the programmed instructions, makes decisions, and sends commands to the actuators to perform the required motion or action.
 
-It receives information from sensors, processes instructions, and controls the actuators to perform the required movement or action.
+Modern robots commonly use microcontrollers — small, programmable computer chips — as their controllers. Microcontrollers such as Arduino are popular in educational and hobbyist robotics, while professional industrial robots use more powerful industrial control systems.
 
-Modern robots commonly use:
-- Microcontrollers such as Arduino
-- Embedded processors
-- Industrial control systems
-
-The controller coordinates all robot operations and ensures that the system functions correctly and safely.
-
-#figure( 
+#figure(
   image("assets/11_arduino_nano.jpg"),
-  caption: [Arduino Nano microcontroller.]
+  caption: [Arduino Nano microcontroller — a common robot brain.]
 )
 
+Together, these components — links, joints, manipulator, wrist, end-effector, actuators, sensors, and controller — form the complete robotic system. Remove any one of them and the robot cannot function properly. This is what makes robotics such a rich and interdisciplinary field: it demands expertise from mechanics, electronics, and computer science all at once.
 
 
-== Robot Classifications @Jazar2022
+== A Short History of Robotics @Jazar2022
 
-Robots can be classified in different ways depending on their design, control system, movement, and application. Different organizations and researchers use various classification methods to describe robotic systems.
+The dream of building machines that move and work like living creatures is ancient — appearing in myths and stories from civilisations thousands of years old. But the engineering reality of modern robotics is much more recent, shaped by a series of remarkable innovations across the twentieth century.
 
+The story begins around 1938, when one of the first machines capable of controlling the position of a tool — used for spray painting — was developed. Then, during World War II, engineers built what they called *teleoperators*: remotely controlled mechanical arms that allowed workers to handle radioactive and hazardous materials from a safe distance. This idea — controlling a machine from far away to do dangerous work — remains central to robotics to this day.
+
+Around the same time, another critical technology was maturing: *Computer Numerical Control (CNC)*. CNC systems allowed machines to be guided by programmed numerical instructions rather than by a human operator's hands, dramatically improving the precision and repeatability of industrial manufacturing.
+
+These streams of invention converged in 1954, when George Devol designed one of the first truly programmable robotic systems. A few years later, Joseph Engelberger — inspired by Devol's work — founded Unimation, the world's first commercial robotics company, and began manufacturing robotic arms called *Unimates* for use in factories. For this pioneering work, Engelberger is widely regarded as the "Father of Robotics."
+
+Throughout the 1960s and 1970s, robotic arms became increasingly established in the automobile industry, performing repetitive tasks like welding and painting with a consistency no human worker could sustain. The 1980s saw a dramatic expansion of the industry, fuelled by major investments in factory automation across manufacturing economies worldwide.
+
+Today, robotics is evolving faster than ever before. Artificial intelligence, advanced computer vision, and miniaturised electronics are making robots smarter, more adaptable, and capable of working safely alongside human beings in ways that were science fiction just a decade ago.
+
+
+== Types of Robots @Jazar2022
+
+Not all robots are created equal. Engineers classify robots in several different ways depending on their design, control system, movement capability, and intended application. Understanding these classifications helps you quickly identify what a robot can do and how it is built.
 
 === Classification by Capability
 
-One common classification groups robots according to how they are controlled and how intelligently they operate.
+One common way to group robots is by how they are controlled and how intelligently they operate.
 
-- *Manual Handling Devices*  
-  Robots directly controlled by a human operator.
-
-- *Fixed Sequence Robots*  
-  Robots that repeatedly perform a predefined sequence of actions.
-
-- *Programmable Robots*  
-  Robots whose operation sequence can be modified through programming.
-
-- *Playback Robots*  
-  Robots that record human-guided motions and repeat them automatically.
-
-- *Numerically Controlled Robots*  
-  Robots controlled using programmed motion instructions.
-
-- *Intelligent Robots*  
-  Robots capable of sensing their environment, making decisions, and adapting to changing conditions.
-
+*Manual handling devices* are directly operated by a human in real time — more of a tool than a true robot. *Fixed sequence robots* repeat the same set of actions over and over, exactly as programmed, with no ability to vary or adapt. *Programmable robots* can have their sequence of actions reprogrammed — you can change what they do by updating their software. *Playback robots* record motions guided by a human operator and then reproduce them automatically. *Numerically controlled robots* follow precise motion instructions expressed as numbers and coordinates. And *intelligent robots* represent the frontier of the field — systems capable of sensing their environment, making complex decisions, and adapting their behaviour to changing conditions.
 
 === Classification by Geometry
 
-Robots can also be classified according to their mechanical structure.
+Robots can also be classified by the physical structure of their manipulator — essentially, the shape of their skeleton.
 
-- *Serial Manipulators*  
-  Robots with links connected in an open chain structure. Most robotic arms belong to this category.
+*Serial manipulators* have links connected in a single open chain, one after another, from the base to the end-effector. This is the most common architecture for robotic arms, and it closely resembles the structure of a human arm. *Parallel manipulators* use a closed-loop structure where multiple chains connect the base to the moving platform simultaneously — this makes them exceptionally rigid and precise, though at the cost of a smaller workspace. *Hybrid manipulators* combine elements of both.
 
-- *Parallel Manipulators*  
-  Robots with closed-loop structures that provide high rigidity and precision.
-
-  #figure( 
-    image("assets/12_serial_parallel_manipulator.jpg"),
-    caption: [Serial (right) and parallel (left) manipulators.]
-  )
-
-- *Hybrid Manipulators*  
-  Robots that combine both serial and parallel mechanisms.
-
-Robotic systems mainly use two types of joints:
-- *Revolute Joints (R)* → rotational movement
-- *Prismatic Joints (P)* → linear movement
-
-  #figure( 
-    image("assets/13_RP_joints.jpg"),
-    caption: [Revolute (R) and Prismatic (P) joints. @Jazar2022]
-  )
-
+#figure(
+  image("assets/12_serial_parallel_manipulator.jpg"),
+  caption: [Serial (right) and parallel (left) manipulators.]
+)
 
 === Classification by Workspace
 
-The *workspace* of a robot is the total region that its end-effector can reach.
-
-- *Reachable Workspace*  
-  All positions the robot can access.
-
-- *Dexterous Workspace*  
-  Positions where the robot can reach with all required orientations.
-
-The workspace depends on the robot's geometry, link lengths, and joint limitations.
-
+The *workspace* of a robot is the complete set of positions that its end-effector can reach. Engineers distinguish between the *reachable workspace* — every position the end-effector can get to in at least one configuration — and the *dexterous workspace* — positions where the end-effector can arrive with full freedom of orientation. The workspace of a robot depends on the number, type, and arrangement of its joints, as well as the lengths of its links.
 
 === Classification by Actuation
 
-Robots are also categorized according to the type of actuator used to create motion.
+Robots are also grouped by the type of actuators that power their movement.
 
-- *Electric Robots*  
-  Use electric motors and are widely used because they are clean, precise, and easy to control.
+*Electric robots* use electric motors as their actuators. They are the most common type in use today — clean, precise, relatively quiet, and easy to control with software. *Hydraulic robots* use pressurised fluid and are capable of producing enormous forces, making them suitable for heavy industrial applications. *Pneumatic robots* use compressed air and are favoured in applications requiring fast, repetitive motions.
 
-  #figure( 
-    image("assets/14_robot_electrical.jpg"),
-    caption: [Electric robot with various electrical components.]
-  )
+#figure(
+  image("assets/14_robot_electrical.jpg"),
+  caption: [Electric robot with electrical drive components.]
+)
 
+#figure(
+  image("assets/15_robot_hydroluics.jpg"),
+  caption: [Hydraulic robot with hydraulic drive components.]
+)
 
-- *Hydraulic Robots*  
-  Use fluid pressure and are suitable for heavy loads and high-force applications.
-
-  #figure( 
-    image("assets/15_robot_hydroluics.jpg"),
-    caption: [Hydraulic robot with various hydraulic components.]
-  )
-
-
-- *Pneumatic Robots*  
-  Use compressed air and are commonly used in fast industrial automation systems.
-
-  #figure( 
-    image("assets/16_robot_pneumatic.jpg"),
-    caption: [Pneumatic robot with various pneumatic components.]
-  )
-
+#figure(
+  image("assets/16_robot_pneumatic.jpg"),
+  caption: [Pneumatic robot with pneumatic drive components.]
+)
 
 === Classification by Control System
 
-Based on control methods, robots are divided into:
+Another important classification concerns how a robot controls its own movement.
 
-- *Servo Robots (Closed-Loop Control)*  
-  Use sensors and feedback systems for accurate motion control.
+*Servo robots*, also called *closed-loop control* robots, use sensors to continuously monitor their position and compare it to the desired position, automatically correcting any errors. This is like steering a car — you constantly adjust based on what you see. *Non-servo robots*, or *open-loop control* robots, follow their programmed instructions without any feedback — they simply execute commands and assume everything went according to plan.
 
-- *Non-Servo Robots (Open-Loop Control)*  
-  Operate without feedback and usually follow fixed motions.
+#figure(
+  image("assets/17_openloop_closedloop_robot.jpg"),
+  caption: [Open-loop (left) and closed-loop (right) control systems.]
+)
 
-  #figure( 
-    image("assets/17_openloop_closedloop_robot.jpg"),
-    caption: [Open-loop (left) and closed-loop (right) control systems.]
-  )
-
-
-Servo robots can further be divided into:
-- *Point-to-Point Robots* → move between predefined points
-- *Continuous Path Robots* → precisely control the entire motion path
-
+Within servo robots, a further distinction is made between *point-to-point robots*, which move between a set of predefined positions without concern for the exact path taken between them, and *continuous path robots*, which carefully control every point along their trajectory — essential for tasks like painting or welding where the path itself matters.
 
 === Classification by Application
 
-Robots are designed for many different applications, including:
-- Industrial manufacturing
-- Pick-and-place operations
-- Welding and painting
-- Medical and surgical assistance
-- Space and underwater exploration
-- Inspection and quality control
-- Rescue and hazardous environment operations
+Finally, robots are often described simply by what they do. Industrial robots manufacture products; medical robots assist surgeons; agricultural robots tend crops; inspection robots examine pipelines, bridges, and aircraft; space robots explore planets and service satellites; and search-and-rescue robots navigate disaster zones to find survivors. Many robotic arms used in industry are designed to mimic the range of motion of a human arm, and for this reason they are sometimes called *anthropomorphic robots*.
 
-Many industrial robotic arms are designed to resemble the movement of a human arm, which is why they are often called *anthropomorphic robots*.
+#workshop-note[The robotic arm in this workshop is a serial, electric, open-loop manipulator with revolute joints — a category that covers a huge proportion of all robotic arms in real-world use.]
 
 
+== Degrees of Freedom: Understanding Robot Motion
 
-== Degrees of Freedom (DoF)
+One of the most important concepts in all of robotics is *Degrees of Freedom*, often abbreviated as *DoF*.
 
-One of the most important concepts in robotics is *Degrees of Freedom (DoF)*.
+Degrees of freedom describes the number of independent movements a robotic system can perform. Every joint that allows a separate movement adds one degree of freedom to the robot. Think of it this way: if a joint can only rotate, that is one DoF. If another joint can also rotate (but about a different axis), that adds a second DoF, and so on.
 
-Degrees of Freedom describe the number of independent movements a robotic system can perform. Each joint that allows a separate movement adds one degree of freedom to the robot.
+Your own body is a powerful example. The shoulder joint allows rotation in multiple directions — that alone contributes several degrees of freedom. The elbow adds one more (bending). The wrist adds more still (rotating, bending, tilting). Each independent motion your arm can make corresponds to one degree of freedom. Taken all together, the human arm has an impressive number of DoF — which is why our hands are capable of such a staggering variety of movements.
 
-For example, in the human arm:
-- The shoulder can rotate in multiple directions
-- The elbow allows bending movement
-- The wrist provides additional rotation and flexibility
+In a robotic system, more degrees of freedom means greater flexibility and a larger workspace — the robot can reach more positions, from more angles. Fewer degrees of freedom means a simpler, cheaper, and easier-to-control system, but with more limited capability. A simple robotic arm might have three DoF; a full industrial six-axis robot arm can reach almost any position and orientation within its workspace. Advanced humanoid robots have DoF in the dozens.
 
-Each independent motion contributes to the total degrees of freedom.
+#figure(
+  image("assets/18_robot_dof.jpg"),
+  caption: [Degrees of freedom in a robotic arm.]
+)
 
-In robotics:
-- More DoF → greater flexibility and range of motion
-- Fewer DoF → simpler design and easier control
-
-A simple robotic arm may have 3 DoF, while advanced industrial and humanoid robots can have 6 or more DoF for highly precise and complex movement.
-
-  #figure( 
-    image("assets/18_robot_dof.jpg"),
-    caption: [Degrees of freedom in a robotic arm.]
-  )
+The concept of degrees of freedom guides almost every design decision made when building a robot — how many joints to include, what types to use, and where to place them. It is the language that engineers use to describe and compare robotic systems across the entire field.

@@ -11,11 +11,14 @@
 = Fundamentals of Robotics
 #include "robotics.typ"
 
-= Mechanical Aspects of Robotics
+= Mechanical Systems in Robotics
 #include "mechanical.typ"
 
 = Electrical and Control Systems
 #include "electrical.typ"
+
+= Hands-On Guide: Building Your Robotic Arm
+#include "practical.typ"
 
 #bibliography("references.bib")
 
