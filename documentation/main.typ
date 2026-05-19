@@ -5,6 +5,7 @@
 #import "config.typ": *
 #show: setup-page
 
+
 = Welcome to the World of Robotics
 #include "intro.typ"
 
@@ -20,7 +21,7 @@
 = Hands-On Guide: Building Your Robotic Arm
 #include "practical.typ"
 
-#bibliography("references.bib")
+#bibliography("references.bib", full: true)
 
 #outline(
   title: [List of Figures],

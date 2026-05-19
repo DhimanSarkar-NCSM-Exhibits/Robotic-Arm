@@ -79,7 +79,7 @@ Every piece of a robot's mechanical structure must be attached to every other pi
 
 In robotics, the most commonly used fasteners are small *metric screws*, designated by the letter *M* followed by a number indicating the diameter in millimetres. The full specification of a metric screw is written in the format:
 
-*M2#sym.times\10#sym.times\0.4*
+*M3#sym.times\12#sym.times\0.5*
 
 This means:
 - *M3* — the screw has a 3 mm shaft diameter
@@ -109,4 +109,4 @@ Mounting styles vary too. *Countersunk screws* are designed to sit flush with th
 
 Choosing the right fastener for each location in a robotic assembly requires thinking about the available space, the load the joint must carry, the material being fastened, and how often the joint may need to be disassembled for maintenance. In 3D-printed assemblies — which are common in educational robotics — fasteners must be chosen and installed with particular care, since plastic threads are softer and easier to strip than metal ones.
 
-#workshop-note[The robotic arm in this workshop uses M2 and M3 metric screws throughout its assembly. You will find specific screw sizes called out at each assembly step in the practical guide.]
+#workshop-note[The robotic arm in this workshop uses M2 metric screws throughout its assembly. You will find specific screw sizes called out at each assembly step in the practical guide.]
