@@ -81,6 +81,92 @@ Today, robotic arms are entering fields that would have seemed unimaginable just
   caption: [Robotic assistance in medical surgeries.]
 )
 
+== World Robot Olympiad: Where Student Robotics Goes Global
+
+Imagine standing on a stage in front of thousands of people from over ninety countries, your robot competing against the best student-built machines in the world. This is not a distant dream — it is exactly what happens every year at the *World Robot Olympiad (WRO)*.
+
+WRO is one of the largest and most prestigious international robotics competitions for students aged 8 to 19. Founded in 2004 and now involving more than ninety countries and over 28,000 teams annually, it is the Olympics of student robotics. Teams design, build, and program autonomous robots to solve real-world-inspired engineering challenges — and the problems change every single year, keeping every season fresh and demanding genuine creativity rather than memorised solutions.
+
+If you are going through this workshop and finding yourself genuinely excited by robots — this is where that excitement can take you.
+
+#figure(
+  image("assets/34_wro.jpg"),
+  caption: [World Robot Olympiad — international student robotics competition.]
+)
+
+
+=== The Competition Categories
+
+WRO organises its competitions into distinct categories, each targeting a different age group and a different style of challenge.
+
+*RoboMission* is the most widely entered category and the most directly relevant to what you are learning here. Teams of two or three students build an autonomous robot using standard educational robotics kits and program it to complete a series of missions on a themed playing field — all within two and a half minutes, with no human control once the robot starts. The field and missions are revealed a few months before the national competition, and teams have to engineer a robot that can complete as many missions as possible to score maximum points. Every season has a different global theme: past themes have included *Connecting the World* (infrastructure and transport), *Smart Cities*, *Feeding the World* (sustainable agriculture), *Robots for a Better World* (environmental challenges), and *Earth Explorers* (scientific exploration). The missions within each theme require the robot to push, carry, sort, or deposit objects in precise locations — demanding accurate movement, reliable sensors, and robust programming.
+
+*Future Innovators* (formerly called Open Category) challenges teams to invent their own robot-based solution to a real-world problem aligned with the year's global theme. Teams present their innovation to a judging panel in the style of a science fair — demonstrating a working prototype and explaining their design decisions, impact, and engineering choices. This category rewards original thinking and is often where the most imaginative projects appear.
+
+*Future Engineers* is a newer and increasingly competitive category targeting older students (ages 14--19). Teams build a self-driving model car using open hardware — any microcontroller, sensor, or actuator combination they choose — and the car must autonomously navigate a randomised track, avoid obstacles, and complete parking manoeuvres. This category is explicitly designed to mirror the real-world challenge of autonomous vehicle development and is growing rapidly in prestige.
+
+*RoboSports* involves teams programming robots to play a sport — typically robot football — autonomously. It is more dynamic and unpredictable than RoboMission, requiring robots that can respond to a moving ball and an opponent in real time.
+
+
+=== The Problem Statement: How It Works
+
+One of the things that makes WRO genuinely exciting — and genuinely hard — is that the specific challenge is secret until a set release date, typically a few months before the national qualifiers. When the problem statement is published, every team in every country receives exactly the same document on the same day. From that moment, the engineering race begins.
+
+The problem statement for RoboMission describes the playing field layout (a mat approximately 2.3 metres × 1.2 metres printed with the season's theme), all the game objects (coloured blocks, balls, figures), and a numbered list of missions each worth a specific number of points. Harder missions are worth more points. Teams study the missions, decide which ones they can reliably complete within the time limit, and then design their robot and program around that strategy.
+
+This means WRO is not just a robotics competition — it is also a strategic engineering challenge. Should you attempt every mission partially, or master four missions completely? Should you use a colour sensor for reliability or risk faster movement without sensing? These decisions are as important as the code itself.
+
+The field mat, game objects, and full scoring rules are all published officially on the WRO website at #link("https://wro-association.org")[_wro-association.org_] each season. Studying past problem statements is one of the best ways to prepare.
+
+
+=== Competing in India
+
+In India, WRO is organised under the banner of *WRO India*, which coordinates national-level participation and sends qualifying teams to the international final.
+
+The competition pathway in India follows three stages. First, *regional or state-level competitions* are held across the country, organised by WRO India's regional partners — these vary by state and city. Participating schools or individuals register through WRO India's official portal, assemble a team of two or three students, and compete at the regional level. Top-performing teams from regional rounds advance to the *WRO India National Championship*, which is typically held mid-year (often between July and September) and brings together the strongest teams from across the country. The top teams from the National Championship earn the right to represent India at the *WRO International Final*, which is held in a different country each November.
+
+Registration in India opens early in the calendar year, usually around January or February. Students and schools should monitor the official WRO India website and social media channels for registration announcements, as deadlines and formats can change annually. The registration link and current season information are available at #link("https://wroindia.org")[_wroindia.org_].
+
+Allowed robotics platforms for RoboMission include LEGO Education SPIKE Prime, LEGO Mindstorms EV3, and other approved educational robotics kits. Teams are responsible for bringing their own equipment to competitions. Building and programming skills developed in workshops like this one — understanding servo motors, sensors, controllers, and systematic thinking — form exactly the foundation needed to succeed with these platforms.
+
+India has been producing increasingly competitive WRO teams in recent years, with Indian students reaching the international final in multiple categories and earning recognition in RoboMission and Future Innovators.
+
+
+=== The International Final
+
+The WRO International Final is held in a different host country each November, rotating across continents. Recent international finals have been held in:
+
+- *2024* — Izmir, Turkey — Theme: *Robots for a Better World*
+- *2023* — Panama City, Panama — Theme: *Connecting the World*
+- *2022* — Dortmund, Germany — Theme: *Robots for a Better World*
+- *2021* — Online (virtual format due to the global pandemic)
+- *2019* — Gyor, Hungary — Theme: *Smart Cities*
+
+At the international final, teams from over ninety countries compete across two or three days of rounds. Each RoboMission team gets multiple attempts on the official field, with the best scoring run counting. Judges evaluate not just scores but also engineering journals that teams submit documenting their design process. Awards are given for gold, silver, and bronze in each age group and category, along with special prizes for creativity, engineering excellence, and sportsmanship.
+
+The scale of the event is something to behold — thousands of students, hundreds of fields running simultaneously, and an atmosphere unlike any school competition. Many WRO alumni describe it as one of the most formative experiences of their student years.
+
+
+=== What Winning Teams Do Differently
+
+Studying the approaches of successful WRO teams reveals consistent patterns that go well beyond simply having a fast robot.
+
+Winning teams invest heavily in *reliability over speed* — a robot that completes four missions every single run will outscore a robot that sometimes completes six but frequently fails. Consistency comes from rigorous testing across many runs, on a field built to official specifications, under varying lighting conditions.
+
+They develop a deep understanding of *colour and light sensing* — most WRO missions involve following lines or identifying coloured objects, and sensor calibration for different ambient lighting conditions is a critical and often overlooked skill.
+
+They maintain detailed *engineering journals* throughout their season — documenting design decisions, failed approaches, and iterations. This habit not only earns judging points but builds the reflective engineering practice that distinguishes great problem-solvers from lucky ones.
+
+And they treat the problem statement as a *design brief*, not a fixed task. The most creative teams often find mission strategies that other teams overlook entirely — completing missions in an unexpected order, building a mechanism that handles two missions with one action, or identifying a mission that looks hard but is actually reliable with the right mechanism.
+
+
+=== How to Start
+
+You do not need to wait for an official competition to begin. Build your understanding now. Study past WRO problem statements — all are publicly archived on the WRO website. Watch video recordings of past international finals, which are freely available online and show the full range of robot designs and strategies from the world's best student teams. Join or form a robotics club at your school. Find a teacher or mentor willing to guide a team.
+
+The skills you are developing right now — understanding how robots move, how electronics work, how to think systematically about a problem and program a solution — are precisely the skills WRO rewards. The competition is open to you. The question is simply whether you will take it.
+
+#workshop-note[Several past WRO India participants have begun their journey at workshops like this one. If you are interested in competing, speak to your instructor about forming a team and starting your preparation for the next season.]
 
 == What This Module Will Teach You
 
