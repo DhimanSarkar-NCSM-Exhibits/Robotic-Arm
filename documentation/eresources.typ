@@ -9,9 +9,9 @@
 // #heading(numbering: none, outlined: false)[Robotics & Automation Workshop Resources]
 
 #align(center)[
-  // #text([Robotics & Automation Workshop eResources], size: 19pt, weight: "bold", fill: color-primary)
+  // #text([Robotics Workshop eResources], size: 19pt, weight: "bold", fill: color-primary)
 
-  #box(inset: 20pt, radius: 5pt, fill: color-light-bg,)[#text([Robotics & Automation Workshop eResources], size: 17pt, weight: "bold", fill: color-primary)]
+  #box(inset: 20pt, radius: 5pt, fill: color-light-bg,)[#text([Robotics Workshop eResources], size: 19pt, weight: "bold", fill: color-primary)]
 ]
 
 #v(0.5cm)
