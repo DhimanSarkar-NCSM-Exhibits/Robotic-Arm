@@ -149,17 +149,17 @@ Robots are also grouped by the type of actuators that power their movement.
 *Electric robots* use electric motors as their actuators. They are the most common type in use today — clean, precise, relatively quiet, and easy to control with software. *Hydraulic robots* use pressurised fluid and are capable of producing enormous forces, making them suitable for heavy industrial applications. *Pneumatic robots* use compressed air and are favoured in applications requiring fast, repetitive motions.
 
 #figure(
-  image("assets/14_robot_electrical.jpg", width: 91%),
+  image("assets/14_robot_electrical.jpg", width: 100%),
   caption: [Electric robot with electrical drive components.]
 )
 
 #figure(
-  image("assets/15_robot_hydroluics.jpg", width: 80%),
+  image("assets/15_robot_hydroluics.jpg", width: 100%),
   caption: [Hydraulic robot with hydraulic drive components.]
 )
 
 #figure(
-  image("assets/16_robot_pneumatic.jpg", width: 80%),
+  image("assets/16_robot_pneumatic.jpg", width: 100%),
   caption: [Pneumatic robot with pneumatic drive components.]
 )
 

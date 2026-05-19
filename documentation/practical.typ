@@ -239,7 +239,7 @@ The Arduino IDE 2 is free and available for all platforms. Open a browser, go to
 Once installed, launch the IDE. On first launch it may take a moment to initialise — this is normal.
 
 #figure(
-  image("assets/ide/ide_1.png", width: 95%),
+  image("assets/ide/ide_1.png", width: 100%),
   caption: [Arduino IDE main interface after first launch on desktop.]
 )
 
@@ -379,7 +379,7 @@ For standard hobby servo motors at 50 Hz:
 The exact mapping varies slightly between servo models. It is good practice to verify the minimum and maximum PWM counts for each servo experimentally before running complex movements. If a servo grinds — its gears are being driven past the mechanical stop — reduce the PWM value immediately.
 
 
-=== The Robot API: Controlling the Arm Through Serial
+=== The Robot API: Controlling the Arm Through Serial Communication
 
 At this point it is worth introducing an important concept that will change how you think about the robotic arm as a system.
 
