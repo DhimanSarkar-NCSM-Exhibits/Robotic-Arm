@@ -1,8 +1,7 @@
 /*
  * File: robot_test_example1.ino
  *
- * SPDX-FileCopyrightText: 2026 Dhiman Sarkar,
- * National Council of Science Museums (NCSM)
+ * SPDX-FileCopyrightText: 2026 Dhiman Sarkar, National Council of Science Museums (NCSM)
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */

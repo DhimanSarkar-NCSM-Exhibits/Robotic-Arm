@@ -40,6 +40,8 @@ Place the *Base Mount* on top of the *Base Cover Box* and align the four screw h
 
 Insert the first *Servo Motor* into the designated slot in the Base Mount, with the servo shaft facing inward toward the holder. This is the base joint — the one that rotates the entire arm horizontally. Route the servo cable through the wire channel to keep it organised. Secure the motor in place using one *M2#sym.times\6 screw*.
 
+See @mech_assembly_1 for the complete assembly of the base structure.
+
 #figure(
   image("assets/assembly/base1_assembly.jpg"),
   caption: [Mechanical Assembly — Step 1: Base Structure.]
@@ -52,11 +54,14 @@ Insert the first *Servo Motor* into the designated slot in the Base Mount, with 
 - Link 1 — 1 pc.
 - Servo Arm Full — 1 pc.
 - Servo Motor — 1 pc.
-- M2#sym.times\6 Screws — 3 pcs.
+- M2#sym.times\6 Screws — 2 pcs.
+- M2#sym.times\3 Screws — 1 pcs.
 
-Place the *Servo Arm Full* into its dedicated groove inside *Link 1*. The servo arm is the mechanical bridge between the rotating shaft of the base motor and the first link — it is what transmits the motor's rotation into the link's movement. Position *Link 1* onto the base structure so that the servo arm aligns correctly with the shaft of the base servo motor. Secure *Link 1* to the servo shaft using one *M2#sym.times\6 screw*.
+Place the *Servo Arm Full* into its dedicated groove inside *Link 1*. The servo arm is the mechanical bridge between the rotating shaft of the base motor and the first link — it is what transmits the motor's rotation into the link's movement. Position *Link 1* onto the base structure so that the servo arm aligns correctly with the shaft of the base servo motor. Secure *Link 1* to the servo shaft using one *M2#sym.times\3 screw*.
 
 Insert the second *Servo Motor* into the motor slot on *Link 1* — this motor will drive *Link 2* in the next step. Secure it using two *M2#sym.times\6 screws*.
+
+See @mech_assembly_2 for the complete assembly of the first link.
 
 #figure(
   image("assets/assembly/mount1_assembly.jpg"),
@@ -70,9 +75,12 @@ Insert the second *Servo Motor* into the motor slot on *Link 1* — this motor w
 - Link 2 — 1 pc.
 - Servo Arm Half — 1 pc.
 - Servo Motor — 1 pc.
-- M2#sym.times\6 Screws — 3 pcs.
+- M2#sym.times\6 Screws — 2 pcs.
+- M2#sym.times\3 Screw — 1 pc.
 
-Place the *Servo Arm Half* into the groove inside *Link 2*. Align *Link 2* with the shaft of the servo motor mounted on *Link 1* and secure the link using one *M2#sym.times\6 screw*. Insert the third *Servo Motor* into the motor slot on *Link 2* and fix it in place using two *M2#sym.times\6 screws*.
+Place the *Servo Arm Half* into the groove inside *Link 2*. Align *Link 2* with the shaft of the servo motor mounted on *Link 1* and secure the link using one *M2#sym.times\3 screw*. Insert the third *Servo Motor* into the motor slot on *Link 2* and fix it in place using two *M2#sym.times\6 screws*.
+
+See @mech_assembly_3 for the complete assembly of the second link.
 
 #figure(
   image("assets/assembly/link2_assembly.jpg"),
@@ -86,9 +94,12 @@ Place the *Servo Arm Half* into the groove inside *Link 2*. Align *Link 2* with 
 - Link 3 — 1 pc.
 - Servo Arm Half — 1 pc.
 - Servo Motor — 1 pc.
-- M2#sym.times\6 Screws — 3 pcs.
+- M2#sym.times\6 Screws — 2 pcs.
+- M2#sym.times\3 Screw — 1 pc.
 
-Place the *Servo Arm Half* into the groove in *Link 3*. Align *Link 3* with the shaft of the servo motor on *Link 2* and secure it using one *M2#sym.times\6 screw*. Mount the fourth *Servo Motor* into the motor slot on *Link 3* and secure it using two *M2#sym.times\6 screws*. This motor will drive the end-effector assembled in the next step.
+Place the *Servo Arm Half* into the groove in *Link 3*. Align *Link 3* with the shaft of the servo motor on *Link 2* and secure it using one *M2#sym.times\3 screw*. Mount the fourth *Servo Motor* into the motor slot on *Link 3*. Place the *End Effector Base* on top of servo motor. Secure the servo motor and the end-effector base altogether using two *M2#sym.times\10 screws*. This motor will drive the end-effector assembled in the next step.
+
+See @mech_assembly_4 for the complete assembly of the third link.
 
 #figure(
   image("assets/assembly/link3_assembly.jpg"),
@@ -110,7 +121,9 @@ Place the *Servo Arm Half* into the groove in *Link 3*. Align *Link 3* with the 
 
 This step brings the gear mechanism you studied in the mechanical systems chapter to life. The driver gear, driven gear, and idler compound gear work together to convert the rotation of the servo motor into the opening and closing motion of the two claws. Assemble the gears and end-effector claws as shown in the reference figure, ensuring the gear teeth mesh cleanly without binding or catching.
 
-Mount the *Servo Arm Half* onto the end-effector mechanism and align it with the fourth servo motor shaft. Secure the assembly using one *M2#sym.times\6 screw*. Mount the servo motor and secure it using two *M2#sym.times\10 screws*.
+Mount the *Servo Arm Half* on to the driver gear and then attach this with the servo motor in the Link 3 and secure it with one *M2#sym.times\3 screw*. Now attache the *Idler Gear* with the right claw using the dedicated grooves and secure it with one *M2#sym.times\10 screw*. Finally, place the left claw on the left side of the idler gear and secure it with one *M2#sym.times\10 screw*.
+
+See @mech_assembly_5 for the complete assembly of the end-effector.
 
 #figure(
   image("assets/assembly/end_eftr_assembly.jpg"),
@@ -225,10 +238,10 @@ The Arduino IDE 2 is free and available for all platforms. Open a browser, go to
 
 Once installed, launch the IDE. On first launch it may take a moment to initialise — this is normal.
 
-// #figure(
-//   image("assets/setup/arduino_ide_interface.jpg"),
-//   caption: [Arduino IDE 2 main interface after first launch on desktop.]
-// )
+#figure(
+  image("assets/ide/ide_1.png"),
+  caption: [Arduino IDE main interface after first launch on desktop.]
+)
 
 // #figure(
 //   image("assets/setup/android_arduino_ide_home.jpg"),
@@ -254,6 +267,11 @@ On Linux, if uploading fails with a permissions error, run the following in a te
 #raw("sudo usermod -a -G dialout $USER", lang: "bash", block: false)
 
 On Windows, if the Nano does not appear under any COM port, the CH340 driver is missing. Search online for *CH340 driver* and install it from the manufacturer's site.
+
+#figure(
+  image("assets/ide/ide_2.png"),
+  caption: [Selecting Arduino Nano and processor in the Tools menu on Linux.]
+)
 
 // #figure(
 //   image("assets/setup/arduino_board_select.jpg"),
@@ -292,15 +310,15 @@ To install on any platform:
 + Confirm the author is *Adafruit*, then click or tap *Install*.
 + When asked about missing dependencies, always choose *Install All*.
 
-// #figure(
-//   image("assets/setup/library_search_adafruit_pwm.jpg"),
-//   caption: [Searching for the Adafruit PWM Servo Driver Library.]
-// )
+#figure(
+  image("assets/ide/ide_3.png"),
+  caption: [Searching for the Adafruit PWM Servo Driver Library.]
+)
 
-// #figure(
-//   image("assets/setup/library_install_all_prompt.jpg"),
-//   caption: [Choosing Install All to include all dependencies.]
-// )
+#figure(
+  image("assets/ide/ide_4.png"),
+  caption: [Choosing Install All to include all dependencies.]
+)
 
 // #figure(
 //   image("assets/setup/android_library_install_all.jpg"),
@@ -313,10 +331,10 @@ Installing any other library in the future follows the exact same process. To up
 
 Open a new blank sketch (*File → New Sketch* on desktop; tap *+* on Android), leave it empty, and click or tap *Upload*. The status bar should read *Done uploading* with no errors. This confirms the board, port, and driver are all correctly configured before you start writing robot code.
 
-// #figure(
-//   image("assets/setup/arduino_upload_success_desktop.jpg"),
-//   caption: [Done uploading confirmation in the Arduino IDE.]
-// )
+#figure(
+  image("assets/ide/ide_6.png"),
+  caption: [Done uploading confirmation in the Arduino IDE.]
+)
 
 If the upload fails, check: correct board and processor selected? Correct port selected? CH340 driver installed (Windows)? Added to `dialout` group (Linux)? USB permission granted (Android)?
 
