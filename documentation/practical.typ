@@ -239,7 +239,7 @@ The Arduino IDE 2 is free and available for all platforms. Open a browser, go to
 Once installed, launch the IDE. On first launch it may take a moment to initialise — this is normal.
 
 #figure(
-  image("assets/ide/ide_1.png"),
+  image("assets/ide/ide_1.png", width: 95%),
   caption: [Arduino IDE main interface after first launch on desktop.]
 )
 

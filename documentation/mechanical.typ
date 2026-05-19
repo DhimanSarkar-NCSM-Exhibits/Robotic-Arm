@@ -45,7 +45,7 @@ A robotic arm brings links and joints together in a chain, starting from a fixed
 Understanding the structure of a robotic arm is easiest when you think of it as an engineering version of your own arm and hand. The first link from the base corresponds roughly to the upper arm; the second to the forearm; and then there may be additional links corresponding to the wrist and hand. Each joint between these links corresponds to a joint in your body.
 
 #figure(
-  image("assets/19_link_joint_sch.jpg"),
+  image("assets/19_link_joint_sch.jpg", width: 93%),
   caption: [Schematic diagram showing links, joints, and end-effector in a robotic arm.]
 )
 
@@ -89,7 +89,7 @@ This means:
 In many practical situations, the pitch value is omitted because standard coarse-pitch screws are assumed.
 
 #figure(
-  image("assets/24_metric_screws.jpg"),
+  image("assets/24_metric_screws.jpg", width: 85%),
   caption: [Reading the specification of a metric screw.]
 )
 
@@ -98,12 +98,12 @@ Screws also differ in the shape of their head — which determines what tool is 
 Mounting styles vary too. *Countersunk screws* are designed to sit flush with the surface of the material — the head tapers into a cone that fits into a matching recess, leaving a flat surface. *Counterbore screws* sit below the surface inside a cylindrical pocket, where a cap covers them. *Pan head screws* have a rounded, protruding head that sits on the surface, making them easy to install and remove.
 
 #figure(
-  image("assets/22_screw_heads.jpg"),
+  image("assets/22_screw_heads.jpg", width: 82%),
   caption: [Various screw head shapes and drive types.]
 )
 
 #figure(
-  image("assets/23_screw_types.jpg"),
+  image("assets/23_screw_types.jpg", width: 82%),
   caption: [Various screw types for different mounting applications.]
 )
 

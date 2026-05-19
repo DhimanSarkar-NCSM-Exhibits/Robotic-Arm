@@ -149,17 +149,17 @@ Robots are also grouped by the type of actuators that power their movement.
 *Electric robots* use electric motors as their actuators. They are the most common type in use today — clean, precise, relatively quiet, and easy to control with software. *Hydraulic robots* use pressurised fluid and are capable of producing enormous forces, making them suitable for heavy industrial applications. *Pneumatic robots* use compressed air and are favoured in applications requiring fast, repetitive motions.
 
 #figure(
-  image("assets/14_robot_electrical.jpg"),
+  image("assets/14_robot_electrical.jpg", width: 91%),
   caption: [Electric robot with electrical drive components.]
 )
 
 #figure(
-  image("assets/15_robot_hydroluics.jpg"),
+  image("assets/15_robot_hydroluics.jpg", width: 80%),
   caption: [Hydraulic robot with hydraulic drive components.]
 )
 
 #figure(
-  image("assets/16_robot_pneumatic.jpg"),
+  image("assets/16_robot_pneumatic.jpg", width: 80%),
   caption: [Pneumatic robot with pneumatic drive components.]
 )
 
@@ -170,7 +170,7 @@ Another important classification concerns how a robot controls its own movement.
 *Servo robots*, also called *closed-loop control* robots, use sensors to continuously monitor their position and compare it to the desired position, automatically correcting any errors. This is like steering a car — you constantly adjust based on what you see. *Non-servo robots*, or *open-loop control* robots, follow their programmed instructions without any feedback — they simply execute commands and assume everything went according to plan.
 
 #figure(
-  image("assets/17_openloop_closedloop_robot.jpg"),
+  image("assets/17_openloop_closedloop_robot.jpg", width: 100%),
   caption: [Open-loop (left) and closed-loop (right) control systems.]
 )
 
@@ -182,7 +182,7 @@ Finally, robots are often described simply by what they do. Industrial robots ma
 
 #workshop-note[The robotic arm in this workshop is a serial, electric, open-loop manipulator with revolute joints — a category that covers a huge proportion of all robotic arms in real-world use.]
 
-
+\
 == Degrees of Freedom: Understanding Robot Motion
 
 One of the most important concepts in all of robotics is *Degrees of Freedom*, often abbreviated as *DoF*.

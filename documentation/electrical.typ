@@ -40,7 +40,6 @@ Beyond electric motors, *pneumatic actuators* use compressed air to drive linear
 
 For most educational and hobby robotic arm projects, servo motors are the go-to actuator because they combine precision, simplicity, and affordability in a compact package.
 
-
 == Servo Motors: Precision in Every Degree
 
 Servo motors deserve a deeper look, because they are arguably the most important actuator in the world of educational and hobby robotics.
@@ -56,7 +55,7 @@ Despite their small size, servo motors contain several cleverly integrated compo
 Inside the housing you will find a small DC motor — the actual source of rotational power. A *gear reduction train* (a compact system of interlocking gears) slows down the motor's high-speed rotation and multiplies its torque, producing an output shaft that turns slowly but with considerable strength. A *position sensor* (typically a small rotary potentiometer) continuously measures the current angle of the output shaft. And an *electronic control circuit* ties everything together, reading the position sensor and controlling the motor to achieve and maintain the commanded angle.
 
 #figure(
-  image("assets/26_servo_initernal.jpg"),
+  image("assets/26_servo_initernal.jpg", width: 100%),
   caption: [Internal components of a typical servo motor.]
 )
 
@@ -167,7 +166,7 @@ Many different microcontrollers are used in robotics, ranging from the very simp
 For compact robotic systems and educational projects, one of the most popular choices is the *Arduino Nano* — a small, breadboard-friendly microcontroller development board based on the *ATmega328P* microcontroller chip.
 
 #figure(
-  image("assets/29_arduino_nano.jpg"),
+  image("assets/29_arduino_nano.jpg",),
   caption: [Arduino Nano microcontroller development board.]
 )
 
