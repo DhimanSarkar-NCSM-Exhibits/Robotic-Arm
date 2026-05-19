@@ -27,3 +27,5 @@
   title: [List of Figures],
   target: figure.where(kind: image),
 )
+
+#include "eresources.typ"
