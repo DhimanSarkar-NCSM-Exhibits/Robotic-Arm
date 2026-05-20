@@ -85,6 +85,11 @@ Today, robotic arms are entering fields that would have seemed unimaginable just
 
 WRO is an annual international robotics competition held across over 85 countries. Teams of two or three students build and program autonomous robots to solve engineering challenges — no remote controls, no human guidance once the match begins. The robot must sense, decide, and act entirely on its own. Founded in 2004, WRO has grown into one of the most prestigious youth robotics events in the world, with students competing through local, national, and international stages every year.
 
+#figure(
+  image("assets/34_wro.jpg"),
+  caption: "WRO Banner"
+)
+
 === Categories
 
 *RoboMission* is the flagship track. Teams build a LEGO-based autonomous robot and complete as many scored missions as possible on a themed game field within two and a half minutes. Missions require navigation, object handling, sorting, and precise placement — genuine engineering under pressure. Age divisions are Elementary (8--12), Junior (11--15), and Senior (14--19).
