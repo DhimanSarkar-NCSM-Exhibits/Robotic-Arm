@@ -13,15 +13,32 @@
 #let doc-date = datetime.today().display("[day] [month repr:long] [year]")
 
 // =============================================================================
-// COLOR PALETTE (Educational & Scientific)
 // =============================================================================
-#let color-primary = rgb("#1E40AF")      // Deep Blue - Trust, Learning
-#let color-secondary = rgb("#DC2626")    // Bright Red - Energy, Robotics
-#let color-accent = rgb("#16A34A")       // Forest Green - STEM, Growth
-#let color-highlight = rgb("#F59E0B")    // Amber - Attention, Important
-#let color-text = rgb("#1F2937")         // Dark Gray - Readability
-#let color-light-bg = rgb("#F3F4F6")     // Light Gray - Backgrounds
-#let color-border = rgb("#E5E7EB")       // Border Gray
+// COLOR PALETTE
+// =============================================================================
+// Toggle between schemes by commenting/uncommenting one block at a time.
+
+// --- SCHEME A: Color (Screen / Digital) ---
+// #let color-primary    = rgb("#1E40AF")   // Deep Blue
+// #let color-secondary  = rgb("#DC2626")   // Bright Red
+// #let color-accent     = rgb("#16A34A")   // Forest Green
+// #let color-highlight  = rgb("#F59E0B")   // Amber
+// #let color-text       = rgb("#1F2937")   // Dark Gray
+// #let color-light-bg   = rgb("#F3F4F6")   // Light Gray
+// #let color-border     = rgb("#E5E7EB")   // Border Gray
+
+// --- SCHEME B: Black & White (Print) --- ACTIVE
+// All tones are neutral grays — optimised for laser/inkjet printing.
+// High contrast on headings grades down to soft tones for body and backgrounds.
+#let color-primary    = rgb("#000000")   // Pure Black    — level-1 headings, key labels
+#let color-secondary  = rgb("#1A1A1A")   // Near Black    — level-2 headings, accents
+#let color-accent     = rgb("#3A3A3A")   // Dark Charcoal — level-3 headings, icons
+#let color-highlight  = rgb("#4A4A4A")   // Mid Charcoal  — captions, callout borders
+#let color-text       = rgb("#1F1F1F")   // Soft Black    — body text
+#let color-light-bg   = rgb("#F0F0F0")   // Near White    — block fills, code bg
+#let color-border     = rgb("#C8C8C8")   // Light Gray    — borders, dividers
+
+
 
 // =============================================================================
 // HELPER FUNCTIONS
