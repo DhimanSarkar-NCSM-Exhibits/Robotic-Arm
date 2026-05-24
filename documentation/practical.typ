@@ -145,7 +145,7 @@ With all five steps complete, the mechanical structure of the robotic arm is ful
   caption: [Complete Mechanical Assembly of the Robotic Arm.]
 ) <mech_assembly_6>
 
-Take a moment to appreciate what you have just built: a four-degree-of-freedom serial manipulator with revolute joints — the same fundamental architecture used in robotic arms across industry worldwide. The base joint rotates the arm horizontally; Links 1, 2, and 3 extend and position the arm in a vertical plane; and the end-effector grips objects. Every concept from the theory chapters is now physical, right in front of you.
+Take a moment to appreciate what you have just built: a three-degree-of-freedom serial manipulator with revolute joints — the same fundamental architecture used in robotic arms across industry worldwide. The base joint rotates the arm horizontally; Links 1, 2, and 3 extend and position the arm in a vertical plane; and the end-effector grips objects. Every concept from the theory chapters is now physical, right in front of you.
 
 
 == Phase 2: Electrical Connections

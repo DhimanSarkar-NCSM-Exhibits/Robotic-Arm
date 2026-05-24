@@ -199,3 +199,5 @@ In a robotic system, more degrees of freedom means greater flexibility and a lar
 )
 
 The concept of degrees of freedom guides almost every design decision made when building a robot — how many joints to include, what types to use, and where to place them. It is the language that engineers use to describe and compare robotic systems across the entire field.
+
+#workshop-note[The robotic arm you will build in this workshop has *3 degrees of freedom* — three revolute joints that position the arm in space — plus a fourth motor dedicated solely to opening and closing the end-effector claw. The claw motor does not add a positional DoF; it is an actuated gripper. This gives the arm the same fundamental architecture as many entry-level industrial and educational robotic arms worldwide.]
