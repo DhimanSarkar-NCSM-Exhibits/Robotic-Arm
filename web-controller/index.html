@@ -48,9 +48,16 @@
   .motor-card {
     background: #fff; border: 1px solid #e0e0e0;
     border-radius: 10px; padding: 18px;
+    transition: border-color 0.1s, box-shadow 0.1s;
   }
+  /* flash on keypress */
+  .motor-card.kb-active {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px #bfdbfe;
+  }
+
   .motor-header {
-    display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+    display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
   }
   .motor-header input[type="text"] {
     font-size: 0.95rem; font-weight: 600; border: none;
@@ -59,6 +66,26 @@
   }
   .motor-header input[type="text"]:focus { border-bottom-color: #2563eb; }
   .motor-num { font-size: 0.75rem; color: #aaa; margin-left: auto; }
+
+  /* ── Keyboard hint row ── */
+  .kb-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 12px;
+  }
+  .kb-row span { font-size: 0.72rem; color: #aaa; }
+  .kb-key {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px;
+    border: 1px solid #d1d5db; border-bottom-width: 2px;
+    border-radius: 4px; background: #f9fafb;
+    font-size: 0.72rem; font-weight: 700; color: #555;
+    font-family: monospace;
+    transition: background 0.08s, color 0.08s;
+  }
+  .kb-key.pressed {
+    background: #2563eb; color: #fff; border-color: #1d4ed8;
+  }
+  .kb-sep { font-size: 0.7rem; color: #ccc; }
 
   .limits-row {
     display: flex; gap: 12px; margin-bottom: 14px;
@@ -99,7 +126,7 @@
   }
   .send-all-btn:hover { background: #1d4ed8; }
 
-  /* ── Console — plain div ── */
+  /* ── Console ── */
   #console-panel {
     background: #1e293b;
     border: 1px solid #334155;
@@ -131,6 +158,7 @@
   .log-sent  { color: #86efac; }
   .log-error { color: #fca5a5; }
   .log-warn  { color: #fde68a; }
+  .log-kb    { color: #c4b5fd; }
 
   /* ── Toast ── */
   #toast {
@@ -182,6 +210,17 @@
 const NUM_MOTORS = 4;
 const motors = [];
 
+// ── Keyboard map: each motor has an increment key and decrement key
+const KB_MAP = [
+  { inc: 'q', dec: 'a' },
+  { inc: 'w', dec: 's' },
+  { inc: 'e', dec: 'd' },
+  { inc: 'r', dec: 'f' },
+];
+
+// Flash timers per card
+const flashTimers = [null, null, null, null];
+
 // ── Build cards ────────────────────────────────────────────────────
 function buildMotors() {
   const container = document.getElementById('motors');
@@ -194,12 +233,22 @@ function buildMotors() {
 }
 
 function motorHTML(i) {
+  const k = KB_MAP[i];
   return `
   <div class="motor-card" id="card-${i}">
     <div class="motor-header">
       <input type="text" value="Motor ${i+1}" id="name-${i}" placeholder="Motor name">
       <span class="motor-num">CH${i}</span>
     </div>
+
+    <div class="kb-row">
+      <span>Keys:</span>
+      <kbd class="kb-key" id="kbkey-inc-${i}">${k.inc.toUpperCase()}</kbd>
+      <span class="kb-sep">▲ inc</span>
+      <kbd class="kb-key" id="kbkey-dec-${i}">${k.dec.toUpperCase()}</kbd>
+      <span class="kb-sep">▼ dec</span>
+    </div>
+
     <div class="limits-row">
       <label>Min°</label>
       <input type="number" id="min-${i}"  value="0"   min="0" max="360" onchange="updateLimits(${i})">
@@ -255,9 +304,50 @@ function setAngle(i, val) {
 function onSlider(i, val) { setAngle(i, parseInt(val)); }
 function syncSlider(i)    { setAngle(i, motors[i].angle); }
 
+// ── Keyboard control ───────────────────────────────────────────────
+function flashCard(i, keyType) {
+  // Highlight key badge
+  const keyEl = document.getElementById(`kbkey-${keyType}-${i}`);
+  if (keyEl) {
+    keyEl.classList.add('pressed');
+    setTimeout(() => keyEl.classList.remove('pressed'), 150);
+  }
+  // Highlight card border
+  const card = document.getElementById(`card-${i}`);
+  card.classList.add('kb-active');
+  clearTimeout(flashTimers[i]);
+  flashTimers[i] = setTimeout(() => card.classList.remove('kb-active'), 200);
+}
+
+document.addEventListener('keydown', (e) => {
+  // Ignore if focus is on an input/select so typing names/values still works
+  const tag = document.activeElement.tagName;
+  if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
+
+  const key = e.key.toLowerCase();
+
+  for (let i = 0; i < NUM_MOTORS; i++) {
+    const k = KB_MAP[i];
+    if (key === k.inc) {
+      const newVal = motors[i].angle + motors[i].step;
+      setAngle(i, newVal);
+      flashCard(i, 'inc');
+      clog(`KB: CH${i} +${motors[i].step}° → ${motors[i].angle}°`, 'kb');
+      e.preventDefault();
+      return;
+    }
+    if (key === k.dec) {
+      const newVal = motors[i].angle - motors[i].step;
+      setAngle(i, newVal);
+      flashCard(i, 'dec');
+      clog(`KB: CH${i} -${motors[i].step}° → ${motors[i].angle}°`, 'kb');
+      e.preventDefault();
+      return;
+    }
+  }
+});
+
 // ── Wheel ──────────────────────────────────────────────────────────
-// 0° = right (3 o'clock), anticlockwise increment
-// 90° = top (12 o'clock), 180° = left (9 o'clock)
 function toRad(deg) {
   return -(deg * Math.PI / 180);
 }
@@ -287,9 +377,9 @@ function drawWheel(i) {
 
   // Tick marks every 30°
   for (let t = 0; t < 360; t += 30) {
-    const rad  = toRad(t);
+    const rad   = toRad(t);
     const isMaj = (t % 90 === 0);
-    const r0   = isMaj ? R - 9 : R - 5;
+    const r0    = isMaj ? R - 9 : R - 5;
     ctx.beginPath();
     ctx.moveTo(cx + r0 * Math.cos(rad), cy + r0 * Math.sin(rad));
     ctx.lineTo(cx + Rt * Math.cos(rad), cy + Rt * Math.sin(rad));
@@ -393,11 +483,8 @@ async function sendAll() {
   const angles = motors.map(m => m.angle);
   const names  = Array.from({length: NUM_MOTORS}, (_,i) =>
     document.getElementById(`name-${i}`).value || `Motor ${i+1}`);
-
-  // Preview exact serial string before sending
   const serialStr = angles.join(',');
   clog(`TX preview → "${serialStr}\\n"`, 'info');
-
   try {
     const res  = await fetch('/send', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -441,6 +528,7 @@ function toast(msg) {
 buildMotors();
 refreshPorts();
 clog('Servo controller ready. Serial format: ang1,ang2,ang3,ang4\\n', 'info');
+clog('Keyboard: Q/A=CH0  W/S=CH1  E/D=CH2  R/F=CH3  (click outside inputs first)', 'kb');
 </script>
 </body>
 </html>
