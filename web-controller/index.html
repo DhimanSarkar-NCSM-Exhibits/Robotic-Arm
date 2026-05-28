@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Servo Controller</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', sans-serif; background: #f5f5f5;
+    color: #222; padding: 24px;
+  }
+  h1 { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; color: #333; }
+
+  /* ── Serial bar ── */
+  .serial-bar {
+    display: flex; align-items: center; gap: 10px;
+    background: #fff; border: 1px solid #ddd; border-radius: 8px;
+    padding: 12px 16px; margin-bottom: 24px; flex-wrap: wrap;
+  }
+  .serial-bar label { font-size: 0.8rem; color: #666; }
+  .serial-bar select {
+    border: 1px solid #ccc; border-radius: 6px;
+    padding: 5px 8px; font-size: 0.85rem; background: #fafafa;
+  }
+  .serial-bar button {
+    padding: 6px 16px; border-radius: 6px; border: none;
+    font-size: 0.85rem; cursor: pointer; font-weight: 500;
+  }
+  #btn-connect       { background: #2563eb; color: #fff; }
+  #btn-connect:hover  { background: #1d4ed8; }
+  #btn-disconnect    { background: #e5e7eb; color: #333; }
+  #btn-disconnect:hover { background: #d1d5db; }
+  #btn-refresh       { background: #f3f4f6; color: #555; border: 1px solid #ccc; }
+  #status-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #d1d5db; margin-left: auto;
+  }
+  #status-dot.connected { background: #22c55e; }
+  #status-text { font-size: 0.8rem; color: #888; }
+
+  /* ── Motor grid ── */
+  .motors {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
+    gap: 16px; margin-bottom: 20px;
+  }
+  .motor-card {
+    background: #fff; border: 1px solid #e0e0e0;
+    border-radius: 10px; padding: 18px;
+  }
+  .motor-header {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
+  }
+  .motor-header input[type="text"] {
+    font-size: 0.95rem; font-weight: 600; border: none;
+    border-bottom: 1px solid #ddd; background: transparent;
+    outline: none; width: 160px; color: #222;
+  }
+  .motor-header input[type="text"]:focus { border-bottom-color: #2563eb; }
+  .motor-num { font-size: 0.75rem; color: #aaa; margin-left: auto; }
+
+  .limits-row {
+    display: flex; gap: 12px; margin-bottom: 14px;
+    align-items: center; flex-wrap: wrap;
+  }
+  .limits-row label { font-size: 0.75rem; color: #888; }
+  .limits-row input[type="number"] {
+    width: 60px; border: 1px solid #ddd; border-radius: 5px;
+    padding: 3px 6px; font-size: 0.8rem; text-align: center;
+  }
+
+  .controls-row { display: flex; align-items: center; gap: 24px; }
+  .slider-wrap  { flex: 1; }
+  .slider-wrap input[type="range"] {
+    width: 100%; accent-color: #2563eb; cursor: pointer;
+  }
+  .slider-labels {
+    display: flex; justify-content: space-between;
+    font-size: 0.72rem; color: #aaa; margin-top: 2px;
+  }
+  .angle-display {
+    text-align: center; font-size: 1.5rem; font-weight: 700;
+    color: #2563eb; margin-top: 6px;
+  }
+  .angle-display span { font-size: 0.85rem; font-weight: 400; color: #888; }
+
+  .wheel-wrap {
+    width: 120px; height: 120px; flex-shrink: 0;
+    pointer-events: none; user-select: none;
+  }
+
+  /* ── Send ── */
+  .send-row { display: flex; justify-content: flex-end; margin-bottom: 24px; }
+  .send-all-btn {
+    padding: 8px 22px; background: #2563eb; color: #fff;
+    border: none; border-radius: 7px; font-size: 0.88rem;
+    font-weight: 500; cursor: pointer;
+  }
+  .send-all-btn:hover { background: #1d4ed8; }
+
+  /* ── Console — plain div ── */
+  #console-panel {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  #console-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 12px; background: #0f172a;
+  }
+  #console-header span {
+    font-size: 0.75rem; color: #94a3b8;
+    font-weight: 600; letter-spacing: 0.05em;
+  }
+  #console-header button {
+    background: none; border: none; color: #64748b;
+    font-size: 0.75rem; cursor: pointer; padding: 2px 6px; border-radius: 4px;
+  }
+  #console-header button:hover { background: #1e293b; color: #cbd5e1; }
+  #console-log {
+    height: 140px; overflow-y: auto; padding: 6px 12px;
+    font-family: 'Courier New', monospace; font-size: 0.78rem;
+    line-height: 1.6; color: #cbd5e1;
+  }
+  .log-line  { display: flex; gap: 10px; }
+  .log-time  { color: #475569; flex-shrink: 0; }
+  .log-info  { color: #93c5fd; }
+  .log-sent  { color: #86efac; }
+  .log-error { color: #fca5a5; }
+  .log-warn  { color: #fde68a; }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: #1e293b; color: #fff; padding: 10px 18px;
+    border-radius: 8px; font-size: 0.83rem; opacity: 0;
+    transition: opacity 0.3s; pointer-events: none; z-index: 100;
+  }
+  #toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<h1>Servo Controller</h1>
+
+<div class="serial-bar">
+  <label>Port</label>
+  <select id="port-select"><option value="">-- select --</option></select>
+  <button id="btn-refresh" onclick="refreshPorts()">⟳</button>
+  <label>Baud</label>
+  <select id="baud-select">
+    <option>9600</option><option>19200</option>
+    <option>38400</option><option>57600</option>
+    <option selected>115200</option>
+  </select>
+  <button id="btn-connect"    onclick="connectSerial()">Connect</button>
+  <button id="btn-disconnect" onclick="disconnectSerial()">Disconnect</button>
+  <div id="status-dot"></div>
+  <span id="status-text">Disconnected</span>
+</div>
+
+<div class="motors" id="motors"></div>
+
+<div class="send-row">
+  <button class="send-all-btn" onclick="sendAll()">Send All Angles</button>
+</div>
+
+<div id="console-panel">
+  <div id="console-header">
+    <span>CONSOLE</span>
+    <button onclick="clearConsole()">Clear</button>
+  </div>
+  <div id="console-log"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const NUM_MOTORS = 4;
+const motors = [];
+
+// ── Build cards ────────────────────────────────────────────────────
+function buildMotors() {
+  const container = document.getElementById('motors');
+  for (let i = 0; i < NUM_MOTORS; i++) {
+    motors.push({ min: 0, max: 180, step: 1, angle: 90 });
+    container.insertAdjacentHTML('beforeend', motorHTML(i));
+    drawWheel(i);
+    syncSlider(i);
+  }
+}
+
+function motorHTML(i) {
+  return `
+  <div class="motor-card" id="card-${i}">
+    <div class="motor-header">
+      <input type="text" value="Motor ${i+1}" id="name-${i}" placeholder="Motor name">
+      <span class="motor-num">CH${i}</span>
+    </div>
+    <div class="limits-row">
+      <label>Min°</label>
+      <input type="number" id="min-${i}"  value="0"   min="0" max="360" onchange="updateLimits(${i})">
+      <label>Max°</label>
+      <input type="number" id="max-${i}"  value="180" min="0" max="360" onchange="updateLimits(${i})">
+      <label>Step°</label>
+      <input type="number" id="step-${i}" value="1"   min="1" max="90"  onchange="updateLimits(${i})">
+    </div>
+    <div class="controls-row">
+      <div class="slider-wrap">
+        <input type="range" id="slider-${i}" min="0" max="180" step="1" value="90"
+          oninput="onSlider(${i}, this.value)">
+        <div class="slider-labels">
+          <span id="lbl-min-${i}">0°</span>
+          <span id="lbl-max-${i}">180°</span>
+        </div>
+        <div class="angle-display" id="disp-${i}">90 <span>deg</span></div>
+      </div>
+      <div class="wheel-wrap">
+        <canvas id="wheel-${i}" width="120" height="120"></canvas>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ── Limits ─────────────────────────────────────────────────────────
+function updateLimits(i) {
+  const mn = parseInt(document.getElementById(`min-${i}`).value);
+  const mx = parseInt(document.getElementById(`max-${i}`).value);
+  const st = parseInt(document.getElementById(`step-${i}`).value);
+  motors[i].min  = mn;
+  motors[i].max  = mx;
+  motors[i].step = st;
+  const slider = document.getElementById(`slider-${i}`);
+  slider.min = mn; slider.max = mx; slider.step = st;
+  document.getElementById(`lbl-min-${i}`).textContent = mn + '°';
+  document.getElementById(`lbl-max-${i}`).textContent = mx + '°';
+  setAngle(i, Math.min(mx, Math.max(mn, motors[i].angle)));
+  clog(`CH${i} limits → min=${mn}° max=${mx}° step=${st}°`, 'warn');
+}
+
+// ── Angle ──────────────────────────────────────────────────────────
+function setAngle(i, val) {
+  const m = motors[i];
+  val = Math.round(val / m.step) * m.step;
+  val = Math.min(m.max, Math.max(m.min, val));
+  m.angle = val;
+  document.getElementById(`slider-${i}`).value = val;
+  document.getElementById(`disp-${i}`).innerHTML = `${val} <span>deg</span>`;
+  drawWheel(i);
+}
+
+function onSlider(i, val) { setAngle(i, parseInt(val)); }
+function syncSlider(i)    { setAngle(i, motors[i].angle); }
+
+// ── Wheel ──────────────────────────────────────────────────────────
+// 0° = right (3 o'clock), anticlockwise increment
+// 90° = top (12 o'clock), 180° = left (9 o'clock)
+function toRad(deg) {
+  return -(deg * Math.PI / 180);
+}
+
+function drawWheel(i) {
+  const canvas = document.getElementById(`wheel-${i}`);
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const cx = 60, cy = 60, R = 42, Rt = 50;
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const m = motors[i];
+
+  // Full circle background
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, Math.PI * 2);
+  ctx.strokeStyle = '#e5e7eb';
+  ctx.lineWidth   = 7;
+  ctx.stroke();
+
+  // Allowed range arc — anticlockwise from min to max
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, toRad(m.min), toRad(m.max), true);
+  ctx.strokeStyle = '#bfdbfe';
+  ctx.lineWidth   = 7;
+  ctx.stroke();
+
+  // Tick marks every 30°
+  for (let t = 0; t < 360; t += 30) {
+    const rad  = toRad(t);
+    const isMaj = (t % 90 === 0);
+    const r0   = isMaj ? R - 9 : R - 5;
+    ctx.beginPath();
+    ctx.moveTo(cx + r0 * Math.cos(rad), cy + r0 * Math.sin(rad));
+    ctx.lineTo(cx + Rt * Math.cos(rad), cy + Rt * Math.sin(rad));
+    ctx.strokeStyle = isMaj ? '#9ca3af' : '#d1d5db';
+    ctx.lineWidth   = isMaj ? 1.5 : 1;
+    ctx.stroke();
+  }
+
+  // Labels
+  ctx.font         = '8px Segoe UI';
+  ctx.fillStyle    = '#9ca3af';
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('0',   cx + Rt + 7,  cy);
+  ctx.fillText('90',  cx,           cy - Rt - 7);
+  ctx.fillText('180', cx - Rt - 10, cy);
+
+  // Limit lines (orange)
+  function limitLine(deg) {
+    const rad = toRad(deg);
+    ctx.beginPath();
+    ctx.moveTo(cx + (R - 11) * Math.cos(rad), cy + (R - 11) * Math.sin(rad));
+    ctx.lineTo(cx + (R + 11) * Math.cos(rad), cy + (R + 11) * Math.sin(rad));
+    ctx.strokeStyle = '#f97316';
+    ctx.lineWidth   = 2;
+    ctx.stroke();
+  }
+  limitLine(m.min);
+  limitLine(m.max);
+
+  // Needle
+  const posRad = toRad(m.angle);
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(cx + (R - 4) * Math.cos(posRad), cy + (R - 4) * Math.sin(posRad));
+  ctx.strokeStyle = '#2563eb';
+  ctx.lineWidth   = 2.5;
+  ctx.lineCap     = 'round';
+  ctx.stroke();
+
+  // Center dot
+  ctx.beginPath();
+  ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+  ctx.fillStyle = '#2563eb';
+  ctx.fill();
+
+  // Position dot on ring
+  ctx.beginPath();
+  ctx.arc(cx + R * Math.cos(posRad), cy + R * Math.sin(posRad), 5, 0, Math.PI * 2);
+  ctx.fillStyle   = '#2563eb';
+  ctx.fill();
+  ctx.strokeStyle = '#fff';
+  ctx.lineWidth   = 2;
+  ctx.stroke();
+}
+
+// ── Serial ─────────────────────────────────────────────────────────
+async function refreshPorts() {
+  clog('Scanning serial ports...', 'info');
+  const res   = await fetch('/ports');
+  const ports = await res.json();
+  const sel   = document.getElementById('port-select');
+  sel.innerHTML = '<option value="">-- select --</option>';
+  ports.forEach(p => sel.insertAdjacentHTML('beforeend', `<option>${p}</option>`));
+  clog(`Found ${ports.length} port(s): ${ports.join(', ') || 'none'}`, 'info');
+}
+
+async function connectSerial() {
+  const port = document.getElementById('port-select').value;
+  const baud = document.getElementById('baud-select').value;
+  if (!port) { toast('Select a port first'); clog('Connect failed: no port selected', 'error'); return; }
+  clog(`Connecting to ${port} @ ${baud} baud...`, 'info');
+  try {
+    const res  = await fetch('/connect', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ port, baud })
+    });
+    const data = await res.json();
+    if (data.status === 'connected') {
+      setConnected(true); toast(`Connected to ${port}`);
+      clog(`Connected: ${port} @ ${baud}`, 'info');
+    } else {
+      clog(`Connect error: ${data.message}`, 'error');
+      toast('Error: ' + data.message);
+    }
+  } catch(e) { clog(`Exception: ${e}`, 'error'); }
+}
+
+async function disconnectSerial() {
+  await fetch('/disconnect', { method: 'POST' });
+  setConnected(false); toast('Disconnected');
+  clog('Serial disconnected', 'warn');
+}
+
+function setConnected(on) {
+  document.getElementById('status-dot').className    = on ? 'connected' : '';
+  document.getElementById('status-text').textContent = on ? 'Connected' : 'Disconnected';
+}
+
+async function sendAll() {
+  const angles = motors.map(m => m.angle);
+  const names  = Array.from({length: NUM_MOTORS}, (_,i) =>
+    document.getElementById(`name-${i}`).value || `Motor ${i+1}`);
+
+  // Preview exact serial string before sending
+  const serialStr = angles.join(',');
+  clog(`TX preview → "${serialStr}\\n"`, 'info');
+
+  try {
+    const res  = await fetch('/send', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ angles })
+    });
+    const data = await res.json();
+    if (data.status === 'sent')
+      clog(`TX sent  → "${data.message}"   [${angles.map((a,i)=>`${names[i]}=${a}°`).join(', ')}]`, 'sent');
+    else
+      clog(`Send error: ${data.message}`, 'error');
+    toast(data.status === 'sent' ? 'Sent: ' + data.message : 'Error: ' + data.message);
+  } catch(e) { clog(`Exception: ${e}`, 'error'); }
+}
+
+// ── Console ────────────────────────────────────────────────────────
+function clog(msg, type = 'info') {
+  const log  = document.getElementById('console-log');
+  const time = new Date().toTimeString().slice(0, 8);
+  const line = document.createElement('div');
+  line.className = 'log-line';
+  line.innerHTML = `<span class="log-time">${time}</span><span class="log-${type}">${msg}</span>`;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+function clearConsole() {
+  document.getElementById('console-log').innerHTML = '';
+}
+
+// ── Toast ──────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ── Init ───────────────────────────────────────────────────────────
+buildMotors();
+refreshPorts();
+clog('Servo controller ready. Serial format: ang1,ang2,ang3,ang4\\n', 'info');
+</script>
+</body>
+</html>
