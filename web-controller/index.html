@@ -12,7 +12,6 @@
   }
   h1 { font-size: 1.2rem; font-weight: 600; margin-bottom: 20px; color: #333; }
 
-  /* ── Serial bar ── */
   .serial-bar {
     display: flex; align-items: center; gap: 10px;
     background: #fff; border: 1px solid #ddd; border-radius: 8px;
@@ -39,7 +38,6 @@
   #status-dot.connected { background: #22c55e; }
   #status-text { font-size: 0.8rem; color: #888; }
 
-  /* ── Motor grid ── */
   .motors {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(440px, 1fr));
@@ -50,12 +48,10 @@
     border-radius: 10px; padding: 18px;
     transition: border-color 0.1s, box-shadow 0.1s;
   }
-  /* flash on keypress */
   .motor-card.kb-active {
     border-color: #2563eb;
     box-shadow: 0 0 0 3px #bfdbfe;
   }
-
   .motor-header {
     display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
   }
@@ -67,10 +63,8 @@
   .motor-header input[type="text"]:focus { border-bottom-color: #2563eb; }
   .motor-num { font-size: 0.75rem; color: #aaa; margin-left: auto; }
 
-  /* ── Keyboard hint row ── */
   .kb-row {
-    display: flex; align-items: center; gap: 8px;
-    margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
   }
   .kb-row span { font-size: 0.72rem; color: #aaa; }
   .kb-key {
@@ -82,9 +76,7 @@
     font-family: monospace;
     transition: background 0.08s, color 0.08s;
   }
-  .kb-key.pressed {
-    background: #2563eb; color: #fff; border-color: #1d4ed8;
-  }
+  .kb-key.pressed { background: #2563eb; color: #fff; border-color: #1d4ed8; }
   .kb-sep { font-size: 0.7rem; color: #ccc; }
 
   .limits-row {
@@ -117,7 +109,6 @@
     pointer-events: none; user-select: none;
   }
 
-  /* ── Send ── */
   .send-row { display: flex; justify-content: flex-end; margin-bottom: 24px; }
   .send-all-btn {
     padding: 8px 22px; background: #2563eb; color: #fff;
@@ -126,13 +117,9 @@
   }
   .send-all-btn:hover { background: #1d4ed8; }
 
-  /* ── Console ── */
   #console-panel {
-    background: #1e293b;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 24px;
+    background: #1e293b; border: 1px solid #334155;
+    border-radius: 10px; overflow: hidden; margin-bottom: 24px;
   }
   #console-header {
     display: flex; align-items: center; justify-content: space-between;
@@ -160,7 +147,6 @@
   .log-warn  { color: #fde68a; }
   .log-kb    { color: #c4b5fd; }
 
-  /* ── Toast ── */
   #toast {
     position: fixed; bottom: 24px; right: 24px;
     background: #1e293b; color: #fff; padding: 10px 18px;
@@ -210,7 +196,6 @@
 const NUM_MOTORS = 4;
 const motors = [];
 
-// ── Keyboard map: each motor has an increment key and decrement key
 const KB_MAP = [
   { inc: 'q', dec: 'a' },
   { inc: 'w', dec: 's' },
@@ -218,8 +203,34 @@ const KB_MAP = [
   { inc: 'r', dec: 'f' },
 ];
 
-// Flash timers per card
 const flashTimers = [null, null, null, null];
+
+// ── Auto-send debounce ─────────────────────────────────────────────
+// Fires 30ms after the last angle change — fast enough for smooth
+// control, slow enough not to flood the serial buffer.
+let autoSendTimer = null;
+
+function scheduleAutoSend() {
+  clearTimeout(autoSendTimer);
+  autoSendTimer = setTimeout(autoSend, 30);
+}
+
+async function autoSend() {
+  const angles = motors.map(m => m.angle);
+  const msg    = `${angles[0]},${angles[1]},${angles[2]},${angles[3]}`;
+  try {
+    const res  = await fetch('/send', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ angles })
+    });
+    const data = await res.json();
+    if (data.status === 'sent')
+      clog(`TX → "${data.message}"`, 'sent');
+    else if (data.status === 'error' && data.message !== 'Not connected')
+      clog(`Auto-send error: ${data.message}`, 'error');
+    // Silently ignore "Not connected" — no serial port open yet
+  } catch(e) { /* network error — ignore silently */ }
+}
 
 // ── Build cards ────────────────────────────────────────────────────
 function buildMotors() {
@@ -240,7 +251,6 @@ function motorHTML(i) {
       <input type="text" value="Motor ${i+1}" id="name-${i}" placeholder="Motor name">
       <span class="motor-num">CH${i}</span>
     </div>
-
     <div class="kb-row">
       <span>Keys:</span>
       <kbd class="kb-key" id="kbkey-inc-${i}">${k.inc.toUpperCase()}</kbd>
@@ -248,7 +258,6 @@ function motorHTML(i) {
       <kbd class="kb-key" id="kbkey-dec-${i}">${k.dec.toUpperCase()}</kbd>
       <span class="kb-sep">▼ dec</span>
     </div>
-
     <div class="limits-row">
       <label>Min°</label>
       <input type="number" id="min-${i}"  value="0"   min="0" max="360" onchange="updateLimits(${i})">
@@ -290,7 +299,7 @@ function updateLimits(i) {
   clog(`CH${i} limits → min=${mn}° max=${mx}° step=${st}°`, 'warn');
 }
 
-// ── Angle ──────────────────────────────────────────────────────────
+// ── Angle — auto-send on every change ─────────────────────────────
 function setAngle(i, val) {
   const m = motors[i];
   val = Math.round(val / m.step) * m.step;
@@ -299,20 +308,19 @@ function setAngle(i, val) {
   document.getElementById(`slider-${i}`).value = val;
   document.getElementById(`disp-${i}`).innerHTML = `${val} <span>deg</span>`;
   drawWheel(i);
+  scheduleAutoSend();   // ← only addition
 }
 
 function onSlider(i, val) { setAngle(i, parseInt(val)); }
 function syncSlider(i)    { setAngle(i, motors[i].angle); }
 
-// ── Keyboard control ───────────────────────────────────────────────
+// ── Keyboard ───────────────────────────────────────────────────────
 function flashCard(i, keyType) {
-  // Highlight key badge
   const keyEl = document.getElementById(`kbkey-${keyType}-${i}`);
   if (keyEl) {
     keyEl.classList.add('pressed');
     setTimeout(() => keyEl.classList.remove('pressed'), 150);
   }
-  // Highlight card border
   const card = document.getElementById(`card-${i}`);
   card.classList.add('kb-active');
   clearTimeout(flashTimers[i]);
@@ -320,66 +328,48 @@ function flashCard(i, keyType) {
 }
 
 document.addEventListener('keydown', (e) => {
-  // Ignore if focus is on an input/select so typing names/values still works
   const tag = document.activeElement.tagName;
   if (tag === 'INPUT' || tag === 'SELECT' || tag === 'TEXTAREA') return;
-
   const key = e.key.toLowerCase();
-
   for (let i = 0; i < NUM_MOTORS; i++) {
     const k = KB_MAP[i];
     if (key === k.inc) {
-      const newVal = motors[i].angle + motors[i].step;
-      setAngle(i, newVal);
+      setAngle(i, motors[i].angle + motors[i].step);
       flashCard(i, 'inc');
       clog(`KB: CH${i} +${motors[i].step}° → ${motors[i].angle}°`, 'kb');
-      e.preventDefault();
-      return;
+      e.preventDefault(); return;
     }
     if (key === k.dec) {
-      const newVal = motors[i].angle - motors[i].step;
-      setAngle(i, newVal);
+      setAngle(i, motors[i].angle - motors[i].step);
       flashCard(i, 'dec');
       clog(`KB: CH${i} -${motors[i].step}° → ${motors[i].angle}°`, 'kb');
-      e.preventDefault();
-      return;
+      e.preventDefault(); return;
     }
   }
 });
 
 // ── Wheel ──────────────────────────────────────────────────────────
-function toRad(deg) {
-  return -(deg * Math.PI / 180);
-}
+function toRad(deg) { return -(deg * Math.PI / 180); }
 
 function drawWheel(i) {
   const canvas = document.getElementById(`wheel-${i}`);
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const cx = 60, cy = 60, R = 42, Rt = 50;
-
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const m = motors[i];
 
-  // Full circle background
   ctx.beginPath();
   ctx.arc(cx, cy, R, 0, Math.PI * 2);
-  ctx.strokeStyle = '#e5e7eb';
-  ctx.lineWidth   = 7;
-  ctx.stroke();
+  ctx.strokeStyle = '#e5e7eb'; ctx.lineWidth = 7; ctx.stroke();
 
-  // Allowed range arc — anticlockwise from min to max
   ctx.beginPath();
   ctx.arc(cx, cy, R, toRad(m.min), toRad(m.max), true);
-  ctx.strokeStyle = '#bfdbfe';
-  ctx.lineWidth   = 7;
-  ctx.stroke();
+  ctx.strokeStyle = '#bfdbfe'; ctx.lineWidth = 7; ctx.stroke();
 
-  // Tick marks every 30°
   for (let t = 0; t < 360; t += 30) {
-    const rad   = toRad(t);
-    const isMaj = (t % 90 === 0);
-    const r0    = isMaj ? R - 9 : R - 5;
+    const rad = toRad(t), isMaj = (t % 90 === 0);
+    const r0  = isMaj ? R - 9 : R - 5;
     ctx.beginPath();
     ctx.moveTo(cx + r0 * Math.cos(rad), cy + r0 * Math.sin(rad));
     ctx.lineTo(cx + Rt * Math.cos(rad), cy + Rt * Math.sin(rad));
@@ -388,52 +378,35 @@ function drawWheel(i) {
     ctx.stroke();
   }
 
-  // Labels
-  ctx.font         = '8px Segoe UI';
-  ctx.fillStyle    = '#9ca3af';
-  ctx.textAlign    = 'center';
-  ctx.textBaseline = 'middle';
+  ctx.font = '8px Segoe UI'; ctx.fillStyle = '#9ca3af';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   ctx.fillText('0',   cx + Rt + 7,  cy);
   ctx.fillText('90',  cx,           cy - Rt - 7);
   ctx.fillText('180', cx - Rt - 10, cy);
 
-  // Limit lines (orange)
   function limitLine(deg) {
     const rad = toRad(deg);
     ctx.beginPath();
-    ctx.moveTo(cx + (R - 11) * Math.cos(rad), cy + (R - 11) * Math.sin(rad));
-    ctx.lineTo(cx + (R + 11) * Math.cos(rad), cy + (R + 11) * Math.sin(rad));
-    ctx.strokeStyle = '#f97316';
-    ctx.lineWidth   = 2;
-    ctx.stroke();
+    ctx.moveTo(cx + (R-11)*Math.cos(rad), cy + (R-11)*Math.sin(rad));
+    ctx.lineTo(cx + (R+11)*Math.cos(rad), cy + (R+11)*Math.sin(rad));
+    ctx.strokeStyle = '#f97316'; ctx.lineWidth = 2; ctx.stroke();
   }
-  limitLine(m.min);
-  limitLine(m.max);
+  limitLine(m.min); limitLine(m.max);
 
-  // Needle
   const posRad = toRad(m.angle);
   ctx.beginPath();
   ctx.moveTo(cx, cy);
-  ctx.lineTo(cx + (R - 4) * Math.cos(posRad), cy + (R - 4) * Math.sin(posRad));
-  ctx.strokeStyle = '#2563eb';
-  ctx.lineWidth   = 2.5;
-  ctx.lineCap     = 'round';
-  ctx.stroke();
+  ctx.lineTo(cx + (R-4)*Math.cos(posRad), cy + (R-4)*Math.sin(posRad));
+  ctx.strokeStyle = '#2563eb'; ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.stroke();
 
-  // Center dot
   ctx.beginPath();
-  ctx.arc(cx, cy, 4, 0, Math.PI * 2);
-  ctx.fillStyle = '#2563eb';
-  ctx.fill();
+  ctx.arc(cx, cy, 4, 0, Math.PI*2);
+  ctx.fillStyle = '#2563eb'; ctx.fill();
 
-  // Position dot on ring
   ctx.beginPath();
-  ctx.arc(cx + R * Math.cos(posRad), cy + R * Math.sin(posRad), 5, 0, Math.PI * 2);
-  ctx.fillStyle   = '#2563eb';
-  ctx.fill();
-  ctx.strokeStyle = '#fff';
-  ctx.lineWidth   = 2;
-  ctx.stroke();
+  ctx.arc(cx + R*Math.cos(posRad), cy + R*Math.sin(posRad), 5, 0, Math.PI*2);
+  ctx.fillStyle = '#2563eb'; ctx.fill();
+  ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
 }
 
 // ── Serial ─────────────────────────────────────────────────────────
@@ -462,8 +435,7 @@ async function connectSerial() {
       setConnected(true); toast(`Connected to ${port}`);
       clog(`Connected: ${port} @ ${baud}`, 'info');
     } else {
-      clog(`Connect error: ${data.message}`, 'error');
-      toast('Error: ' + data.message);
+      clog(`Connect error: ${data.message}`, 'error'); toast('Error: ' + data.message);
     }
   } catch(e) { clog(`Exception: ${e}`, 'error'); }
 }
@@ -479,22 +451,19 @@ function setConnected(on) {
   document.getElementById('status-text').textContent = on ? 'Connected' : 'Disconnected';
 }
 
+// Manual send-all still available for explicit trigger
 async function sendAll() {
   const angles = motors.map(m => m.angle);
   const names  = Array.from({length: NUM_MOTORS}, (_,i) =>
     document.getElementById(`name-${i}`).value || `Motor ${i+1}`);
-  const serialStr = angles.join(',');
-  clog(`TX preview → "${serialStr}\\n"`, 'info');
+  clog(`Manual TX → "${angles.join(',')}"   [${angles.map((a,i)=>`${names[i]}=${a}°`).join(', ')}]`, 'sent');
   try {
     const res  = await fetch('/send', {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ angles })
     });
     const data = await res.json();
-    if (data.status === 'sent')
-      clog(`TX sent  → "${data.message}"   [${angles.map((a,i)=>`${names[i]}=${a}°`).join(', ')}]`, 'sent');
-    else
-      clog(`Send error: ${data.message}`, 'error');
+    if (data.status !== 'sent') clog(`Send error: ${data.message}`, 'error');
     toast(data.status === 'sent' ? 'Sent: ' + data.message : 'Error: ' + data.message);
   } catch(e) { clog(`Exception: ${e}`, 'error'); }
 }
@@ -510,16 +479,13 @@ function clog(msg, type = 'info') {
   log.scrollTop = log.scrollHeight;
 }
 
-function clearConsole() {
-  document.getElementById('console-log').innerHTML = '';
-}
+function clearConsole() { document.getElementById('console-log').innerHTML = ''; }
 
 // ── Toast ──────────────────────────────────────────────────────────
 let toastTimer;
 function toast(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
+  el.textContent = msg; el.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 2500);
 }
@@ -527,7 +493,7 @@ function toast(msg) {
 // ── Init ───────────────────────────────────────────────────────────
 buildMotors();
 refreshPorts();
-clog('Servo controller ready. Serial format: ang1,ang2,ang3,ang4\\n', 'info');
+clog('Servo controller ready. Auto-send ON — serial format: ang1,ang2,ang3,ang4\\n', 'info');
 clog('Keyboard: Q/A=CH0  W/S=CH1  E/D=CH2  R/F=CH3  (click outside inputs first)', 'kb');
 </script>
 </body>
