@@ -18,6 +18,7 @@ Adafruit_PWMServoDriver pca9685 = Adafruit_PWMServoDriver();
 #define SERVOMAX  512
 
 void setup() {
+  Wire.begin();
 
   pca9685.begin();
   pca9685.setPWMFreq(50);
@@ -29,7 +30,6 @@ void loop() {
 
   // Move servos from 30° to 60°
   for (int angle = 30; angle <= 60; angle++) {
-
     int pulse = map(angle, 0, 180, SERVOMIN, SERVOMAX);
 
     // setPWM(channel, ON_time, OFF_time)
@@ -49,7 +49,6 @@ void loop() {
 
   // Move servos from 60° back to 30°
   for (int angle = 60; angle >= 30; angle--) {
-
     int pulse = map(angle, 0, 180, SERVOMIN, SERVOMAX);
 
     pca9685.setPWM(0, 0, pulse);

@@ -4,29 +4,28 @@
  * SPDX-FileCopyrightText: 2026 Dhiman Sarkar, National Council of Science Museums (NCSM)
  *
  * SPDX-License-Identifier: AGPL-3.0-or-later
- */
+*/
 
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+Adafruit_PWMServoDriver pca9685 = Adafruit_PWMServoDriver();
 
 int servoMin = 102;
 int servoMax = 512;
 
 void setup() {
-
   Serial.begin(115200);
 
-  pwm.begin();
-  pwm.setPWMFreq(50);
+  Wire.begin();
 
+  pca9685.begin();
+  pca9685.setPWMFreq(50);
+  pca9685.setOscillatorFrequency(25000000);
 }
 
 void loop() {
-
   if(Serial.available()) {
-
     String data = Serial.readStringUntil('\n');
 
     data.trim();
@@ -37,10 +36,8 @@ void loop() {
     int c3 = data.indexOf(',', c2 + 1);
 
     if(c1 == -1 || c2 == -1 || c3 == -1) {
-
       Serial.println("ERROR");
       return;
-
     }
 
     // Extract values
@@ -62,10 +59,8 @@ void loop() {
       ang3 < 0 || ang3 > 180 ||
       ang4 < 0 || ang4 > 180
     ) {
-
       Serial.println("ERROR");
       return;
-
     }
 
     // Convert angle to PWM
@@ -76,13 +71,11 @@ void loop() {
 
     // Update servos
     // setPWM(channel, start, end)
-    pwm.setPWM(0, 0, pwm1);
-    pwm.setPWM(1, 0, pwm2);
-    pwm.setPWM(2, 0, pwm3);
-    pwm.setPWM(3, 0, pwm4);
+    pca9685.setPWM(0, 0, pwm1);
+    pca9685.setPWM(1, 0, pwm2);
+    pca9685.setPWM(2, 0, pwm3);
+    pca9685.setPWM(3, 0, pwm4);
 
     Serial.println("OK");
-
   }
-
 }

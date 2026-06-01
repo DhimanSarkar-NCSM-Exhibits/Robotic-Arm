@@ -7,7 +7,7 @@
 // DOCUMENT METADATA
 // =============================================================================
 #let isDraft = false
-#let doc-version = "1.2"
+#let doc-version = "1.3"
 #let doc-title = "Information Brochure: Robotics Workshop (Summer Vacation Camp 2026)"
 #let doc-author = "Dhiman Sarkar"
 #let doc-date = datetime.today().display("[day] [month repr:long] [year]")

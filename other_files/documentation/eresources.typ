@@ -14,7 +14,7 @@
   #box(inset: 20pt, radius: 5pt, fill: color-light-bg,)[#text([Robotics Workshop eResources], size: 19pt, weight: "bold", fill: color-primary)]
 ]
 
-#v(0.5cm)
+// #v(0.4cm)
 
 #align(center)[
   #box(inset: 14pt, radius: 10pt, fill: rgb("#F4F8FF"), stroke: rgb("#B8D4FF"))[
@@ -22,7 +22,7 @@
   ]
 ]
 
-#v(0.5cm)
+// #v(0.4cm)
 
 #heading(level: 2, numbering: none, outlined: false)[📚 Available Resources]
 
@@ -36,7 +36,7 @@ Inside the repository, students can find:
 - 📦 Updated instructions and guides
 - 🚀 Extra references and practice resources
 
-#v(0.5cm)
+#v(0.4cm)
 
 #heading(level: 2, numbering: none, outlined: false)[🌐 Official Workshop Repository]
 
@@ -66,7 +66,7 @@ Inside the repository, students can find:
   )
 ]
 
-#v(0.5cm)
+#v(0.4cm)
 
 #heading(level: 2, numbering: none, outlined: false)[🧭 How to Use]
 
@@ -76,7 +76,7 @@ Inside the repository, students can find:
 4. Practice and experiment on your own
 5. Visit regularly for updates and new materials
 
-#v(0.5cm)
+#v(0.4cm)
 
 #align(center)[
   #text(size: 18pt, weight: "bold", fill: rgb("#D63384"))[

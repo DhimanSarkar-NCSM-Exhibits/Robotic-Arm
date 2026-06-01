@@ -411,7 +411,7 @@ Upload the following program to the Arduino Nano. This is the main controller â€
 
 #raw(
   read("assets/arduino/robot_controller_example.ino"),
-  lang: "cpp",
+  lang: "c",
   block: true,
 )
 
