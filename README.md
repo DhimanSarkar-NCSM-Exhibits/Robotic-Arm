@@ -1,6 +1,6 @@
 # Documentation
 
-see documentation [here](/Information Brochure).
+see documentation [here](Information%20Brochure).
 
 
 # Presentation Link
