@@ -1,4 +1,4 @@
-# 🤖 Servo Controller
+# 🤖 Robot Arm Controller
 > Control servo motors from your **browser** — no extra software needed!
 
 ---
